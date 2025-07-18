@@ -15,11 +15,12 @@ interface GameScorebugProps {
 }
 
 export function GameScorebug({ game, homeTeam, awayTeam, onGameClick }: GameScorebugProps) {
-  const isGamePlayed = game.gameStatus !== GameResult.NOT_PLAYED
+  const gameStatus = game.gameStatus || game.status || GameResult.NOT_PLAYED
+  const isGamePlayed = gameStatus !== GameResult.NOT_PLAYED
 
   const isHomeWinner = isGamePlayed && game.homeScore > game.awayScore
   const isAwayWinner = isGamePlayed && game.awayScore > game.homeScore
-  const isTie = isGamePlayed && game.homeScore === game.awayScore && game.gameStatus === GameResult.TIE
+  const isTie = isGamePlayed && game.homeScore === game.awayScore && gameStatus === GameResult.TIE
 
   return (
     <Card
@@ -33,7 +34,7 @@ export function GameScorebug({ game, homeTeam, awayTeam, onGameClick }: GameScor
         <div className="flex items-center justify-between text-lg font-semibold">
           <div className="flex items-center gap-2">
             <Image
-              src={getTeamLogo(awayTeam.abbrName) || "/placeholder.svg"}
+              src={getTeamLogo(awayTeam.abbrName || awayTeam.teamAbbr) || "/placeholder.svg"}
               alt={`${awayTeam.displayName} logo`}
               width={32}
               height={32}
@@ -50,7 +51,7 @@ export function GameScorebug({ game, homeTeam, awayTeam, onGameClick }: GameScor
         <div className="flex items-center justify-between text-lg font-semibold">
           <div className="flex items-center gap-2">
             <Image
-              src={getTeamLogo(homeTeam.abbrName) || "/placeholder.svg"}
+              src={getTeamLogo(homeTeam.abbrName || homeTeam.teamAbbr) || "/placeholder.svg"}
               alt={`${homeTeam.displayName} logo`}
               width={32}
               height={32}
