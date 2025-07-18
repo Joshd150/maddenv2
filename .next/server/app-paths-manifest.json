@@ -5,5 +5,6 @@
   "/league-hub/schedule/page": "app/league-hub/schedule/page.js",
   "/league-hub/trades/page": "app/league-hub/trades/page.js",
   "/league-hub/roster-moves/page": "app/league-hub/roster-moves/page.js",
-  "/league-hub/teams/page": "app/league-hub/teams/page.js"
+  "/league-hub/teams/page": "app/league-hub/teams/page.js",
+  "/league-hub/stats/page": "app/league-hub/stats/page.js"
 }
