@@ -8,7 +8,7 @@ interface TeamLogoProps {
 }
 
 export function TeamLogo({ teamAbbr, width = 24, height = 24, className }: TeamLogoProps) {
-  const logoPath = `/images/teams/${(teamAbbr || "fa").toLowerCase()}.png` // This line is key
+  const logoPath = `/images/teams/${(teamAbbr || "fa").toLowerCase()}.png`
 
   return (
     <Image
