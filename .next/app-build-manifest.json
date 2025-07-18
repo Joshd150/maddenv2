@@ -51,6 +51,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/league-hub/playoffs/page.js"
     ],
+    "/league-hub/trades/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/league-hub/trades/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
