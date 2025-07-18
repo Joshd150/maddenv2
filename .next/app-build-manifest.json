@@ -31,10 +31,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/league-hub/standings/page.js"
     ],
-    "/_not-found/page": [
+    "/league-hub/roster-moves/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/league-hub/roster-moves/page.js"
+    ],
+    "/league-hub/rating-adjustments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/league-hub/rating-adjustments/page.js"
     ]
   }
 }
