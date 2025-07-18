@@ -30,6 +30,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/league-hub/stats/page.js"
+    ],
+    "/league-hub/playoffs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/league-hub/playoffs/page.js"
     ]
   }
 }
