@@ -50,29 +50,29 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
   const teamMap = useMemo(() => new Map(teams.map((t) => [t.teamId, t])), [teams])
 
   return (
-    <div className="rounded-lg border border-border nfl-card overflow-hidden">
+    <div className="rounded-lg border border-border nfl-card overflow-x-auto">
       <Table>
         <TableHeader className="bg-muted/50">
           <TableRow className="hover:bg-muted/50">
-            <TableHead className="w-[60px] font-bold">Rank</TableHead>
-            <TableHead className="font-bold">
+            <TableHead className="w-[50px] sm:w-[60px] font-bold text-xs sm:text-sm">Rank</TableHead>
+            <TableHead className="font-bold text-xs sm:text-sm min-w-[120px]">
               <Button
                 variant="ghost"
                 onClick={() => handleSort("player.lastName")}
-                className="px-0 hover:bg-transparent font-bold"
+                className="px-0 hover:bg-transparent font-bold text-xs sm:text-sm"
               >
                 Player
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ArrowUpDown className="ml-1 sm:ml-2 h-3 h-3 sm:h-4 sm:w-4" />
               </Button>
             </TableHead>
-            <TableHead className="font-bold">Team</TableHead>
-            <TableHead className="font-bold">Pos</TableHead>
-            <TableHead className="font-bold">OVR</TableHead>
+            <TableHead className="font-bold text-xs sm:text-sm">Team</TableHead>
+            <TableHead className="font-bold text-xs sm:text-sm">OVR</TableHead>
+            <TableHead className="font-bold text-xs sm:text-sm hidden sm:table-cell">Best OVR</TableHead>
             {columns.map((col) => (
-              <TableHead key={col.key} className="font-bold">
-                <Button variant="ghost" onClick={() => handleSort(col.key)} className="px-0 hover:bg-transparent font-bold">
+              <TableHead key={col.key} className="font-bold text-xs sm:text-sm">
+                <Button variant="ghost" onClick={() => handleSort(col.key)} className="px-0 hover:bg-transparent font-bold text-xs sm:text-sm">
                   {col.header}
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                  <ArrowUpDown className="ml-1 sm:ml-2 h-3 h-3 sm:h-4 sm:w-4" />
                 </Button>
               </TableHead>
             ))}
@@ -81,7 +81,7 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
         <TableBody>
           {sortedStats.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length + 5} className="h-24 text-center text-muted-foreground">
+              <TableCell colSpan={columns.length + 5} className="h-16 sm:h-24 text-center text-muted-foreground text-sm">
                 No players found with these stats.
               </TableCell>
             </TableRow>
@@ -95,28 +95,40 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
                   onClick={() => onPlayerClick(player)}
                   className="cursor-pointer hover:bg-muted/30 transition-colors"
                 >
-                  <TableCell className="font-bold text-primary">#{index + 1}</TableCell>
-                  <TableCell className="font-semibold">{getPlayerFullName(player)}</TableCell>
+                  <TableCell className="font-bold text-primary text-xs sm:text-sm">#{index + 1}</TableCell>
                   <TableCell>
-                    {team ? (
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      {team && (
                         <Image
                           src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
                           alt={`${team.displayName} logo`}
-                          width={24}
-                          height={24}
+                          width={20}
+                          height={20}
                           className="rounded-full"
+                          style={{ width: 'auto', height: 'auto' }}
                         />
-                        <span className="font-semibold">{team.abbrName || team.teamAbbr}</span>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-xs sm:text-sm">{getPlayerFullName(player)}</span>
+                        <Badge variant="outline" className="text-xs px-1 py-0">
+                          {player.position}
+                        </Badge>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {team ? (
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="font-semibold text-xs sm:text-sm">{team.abbrName || team.teamAbbr}</span>
                       </div>
                     ) : (
-                      "N/A"
+                      <span className="text-xs sm:text-sm">N/A</span>
                     )}
                   </TableCell>
-                  <TableCell className="font-semibold">{player.position}</TableCell>
-                  <TableCell className="font-bold text-secondary">{player.playerBestOvr}</TableCell>
+                  <TableCell className="font-bold text-secondary text-xs sm:text-sm">{player.playerBestOvr || player.overall} OVR</TableCell>
+                  <TableCell className="font-bold text-secondary text-xs sm:text-sm hidden sm:table-cell">{player.playerBestOvr}</TableCell>
                   {columns.map((col) => (
-                    <TableCell key={col.key} className="font-semibold">
+                    <TableCell key={col.key} className="font-semibold text-xs sm:text-sm">
                       {typeof item[col.key] === "number" ? item[col.key].toFixed(1).replace(/\.0$/, "") : "0"}
                     </TableCell>
                   ))}
