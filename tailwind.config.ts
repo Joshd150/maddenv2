@@ -26,11 +26,21 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#8B5CF6", // Purple-500
           foreground: "hsl(var(--primary-foreground))",
+          50: "#F3F4F6",
+          100: "#E5E7EB",
+          200: "#D1D5DB",
+          300: "#9CA3AF",
+          400: "#6B7280",
+          500: "#8B5CF6",
+          600: "#7C3AED",
+          700: "#6D28D9",
+          800: "#5B21B6",
+          900: "#4C1D95",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#A855F7", // Purple-400
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -53,7 +63,32 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "0 0% 98%",
         },
-        // Explicitly add green and red colors for consistent styling
+        // VFL Purple theme colors
+        purple: {
+          50: "#FAF5FF",
+          100: "#F3E8FF",
+          200: "#E9D5FF",
+          300: "#D8B4FE",
+          400: "#C084FC",
+          500: "#A855F7",
+          600: "#9333EA",
+          700: "#7C2D12",
+          800: "#6B21B6",
+          900: "#581C87",
+          950: "#3B0764",
+        },
+        void: {
+          50: "#F8FAFC",
+          100: "#F1F5F9",
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#64748B",
+          600: "#475569",
+          700: "#334155",
+          800: "#1E293B",
+          900: "#0F172A",
+        },
         green: {
           50: "#f0fdf4",
           100: "#dcfce7",

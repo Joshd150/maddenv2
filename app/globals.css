@@ -4,47 +4,47 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 250 100% 98%;
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 250 100% 99%;
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 250 100% 99%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --secondary: 262 100% 70%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
+    --muted: 250 100% 96%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
+    --accent: 262 100% 95%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
+    --border: 250 100% 89%;
+    --input: 250 100% 89%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 250 100% 4%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 250 100% 6%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
+    --popover: 250 100% 6%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
+    --secondary: 250 100% 15%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
+    --muted: 250 100% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --accent: 250 100% 15%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --border: 250 100% 15%;
+    --input: 250 100% 15%;
     --ring: 0 0% 83.1%;
   }
 }
@@ -68,20 +68,48 @@
 /* NFL-style components */
 @layer components {
 
-  .nfl-card {
+  .vfl-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease;
   }
 
-  .nfl-card:hover {
+  .vfl-card:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transform: translateY(-1px);
   }
 
+  .vfl-gradient {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 50%, #C084FC 100%);
+  }
+
+  .void-gradient {
+    background: linear-gradient(135deg, #1E293B 0%, #334155 50%, #475569 100%);
+  }
+
+  .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    object-fit: cover;
+    opacity: 0.1;
+  }
+
+  .video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  }
   .game-card {
-    background: var(--gradient-card);
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -95,7 +123,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
     transition: left 0.5s;
   }
 
@@ -106,7 +134,7 @@
   .game-card:hover {
     border-color: hsl(var(--primary));
     box-shadow: 
-      0 0 20px rgba(59, 130, 246, 0.3),
+      0 0 20px rgba(139, 92, 246, 0.3),
       0 8px 25px rgba(0, 0, 0, 0.4);
     transform: translateY(-3px) scale(1.02);
   }
@@ -138,7 +166,7 @@
   }
 
   .hero-gradient {
-    background: var(--gradient-hero);
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 25%, #6D28D9 50%, #5B21B6 75%, #4C1D95 100%);
   }
 
   .glass-effect {
@@ -148,7 +176,7 @@
   }
 
   .text-gradient {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

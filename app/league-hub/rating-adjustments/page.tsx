@@ -20,6 +20,7 @@ interface RatingAdjustment {
   id: string
   timestamp: Date
   player: Player
+  author: string // Added author field
   adjustments: {
     attribute: string
     oldValue: number
@@ -27,7 +28,7 @@ interface RatingAdjustment {
     change: number
   }[]
   reason?: string
-  adjustedBy: string
+  adjustedBy: string // This will be the author
 }
 
 // Mock data - replace with actual API calls
@@ -51,6 +52,7 @@ const mockRatingAdjustments: RatingAdjustment[] = [
       throwPowerRating: 97,
       throwAccRating: 92
     } as Player,
+    author: "Commissioner",
     adjustments: [
       { attribute: "Speed", oldValue: 81, newValue: 83, change: 2 },
       { attribute: "Throw Power", oldValue: 95, newValue: 97, change: 2 },
@@ -78,6 +80,7 @@ const mockRatingAdjustments: RatingAdjustment[] = [
       throwPowerRating: 99,
       throwAccRating: 88
     } as Player,
+    author: "Admin",
     adjustments: [
       { attribute: "Throw Accuracy", oldValue: 86, newValue: 88, change: 2 }
     ],
@@ -86,6 +89,42 @@ const mockRatingAdjustments: RatingAdjustment[] = [
   }
 ]
 
+// Function to group adjustments by player and time window
+function groupAdjustmentsByPlayerAndTime(adjustments: RatingAdjustment[], timeWindowMs: number = 5 * 60 * 1000): RatingAdjustment[] {
+  const grouped = new Map<string, RatingAdjustment[]>()
+  
+  // Sort by timestamp
+  const sorted = [...adjustments].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+  
+  for (const adjustment of sorted) {
+    const playerKey = `${adjustment.player.rosterId}-${adjustment.author}`
+    
+    if (!grouped.has(playerKey)) {
+      grouped.set(playerKey, [])
+    }
+    
+    const playerAdjustments = grouped.get(playerKey)!
+    const lastAdjustment = playerAdjustments[playerAdjustments.length - 1]
+    
+    // If within time window of last adjustment, merge them
+    if (lastAdjustment && 
+        adjustment.timestamp.getTime() - lastAdjustment.timestamp.getTime() <= timeWindowMs) {
+      // Merge adjustments
+      lastAdjustment.adjustments.push(...adjustment.adjustments)
+      lastAdjustment.timestamp = adjustment.timestamp // Use latest timestamp
+      if (adjustment.reason) {
+        lastAdjustment.reason = lastAdjustment.reason 
+          ? `${lastAdjustment.reason}; ${adjustment.reason}`
+          : adjustment.reason
+      }
+    } else {
+      playerAdjustments.push(adjustment)
+    }
+  }
+  
+  // Flatten back to array
+  return Array.from(grouped.values()).flat()
+}
 function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
   const [allTeams, setAllTeams] = useState<Team[]>([])
@@ -118,11 +157,11 @@ function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) 
 
   return (
     <>
-      <Card className="border hover:shadow-lg transition-all duration-200">
+      <Card className="vfl-card hover:shadow-lg transition-all duration-200">
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 vfl-gradient rounded-full flex items-center justify-center">
                 <span className="font-bold text-primary">{adjustment.player.position}</span>
               </div>
               <div>
@@ -133,7 +172,7 @@ function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) 
                   {team && <TeamLogo teamAbbr={team.abbrName || team.teamAbbr} width={16} height={16} />}
                   <span>{team?.displayName || "Free Agent"}</span>
                   <span>•</span>
-                  <span>{adjustment.player.overall} OVR</span>
+                  <span>{adjustment.player.playerBestOvr || adjustment.player.overall} OVR</span>
                 </div>
               </div>
             </div>
@@ -142,7 +181,7 @@ function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) 
                 {adjustment.timestamp.toLocaleDateString()} at {adjustment.timestamp.toLocaleTimeString()}
               </div>
               <div className="text-xs text-muted-foreground">
-                Adjusted by {adjustment.adjustedBy}
+                Adjusted by {adjustment.author || adjustment.adjustedBy}
               </div>
             </div>
           </div>
@@ -216,7 +255,10 @@ export default function RatingAdjustmentsPage() {
   const [filterAdjuster, setFilterAdjuster] = useState("all")
 
   const filteredAdjustments = useMemo(() => {
-    return adjustments.filter((adjustment) => {
+    // First group adjustments by player and time
+    const groupedAdjustments = groupAdjustmentsByPlayerAndTime(adjustments)
+    
+    return groupedAdjustments.filter((adjustment) => {
       const matchesSearch = 
         adjustment.player.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         adjustment.player.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -237,7 +279,7 @@ export default function RatingAdjustmentsPage() {
         }
       })()
 
-      const matchesAdjuster = filterAdjuster === "all" || adjustment.adjustedBy === filterAdjuster
+      const matchesAdjuster = filterAdjuster === "all" || (adjustment.author || adjustment.adjustedBy) === filterAdjuster
 
       return matchesSearch && matchesTimeframe && matchesAdjuster
     }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
@@ -248,7 +290,7 @@ export default function RatingAdjustmentsPage() {
       setLoading(true)
       setError(null)
       try {
-        // TODO: Implement actual API calls to fetch rating adjustments
+        // TODO: Implement actual API calls to fetch rating adjustments from Firestore
         // const fetchedAdjustments = await getRatingAdjustments(LEAGUE_ID)
         // setAdjustments(fetchedAdjustments)
       } catch (err: any) {
@@ -261,7 +303,7 @@ export default function RatingAdjustmentsPage() {
     loadAdjustments()
   }, [refreshTrigger])
 
-  const adjusters = Array.from(new Set(adjustments.map(a => a.adjustedBy))).sort()
+  const adjusters = Array.from(new Set(adjustments.map(a => a.author || a.adjustedBy))).sort()
 
   return (
     <div className="min-h-[90vh] bg-background rounded-xl py-6 px-4 flex flex-col">
@@ -271,13 +313,13 @@ export default function RatingAdjustmentsPage() {
             Rating Adjustments
           </CardTitle>
           <CardDescription className="text-lg">
-            Track all player rating changes and adjustments made to the league.
+            Track all player rating changes and adjustments made to the league. Adjustments within 5 minutes are automatically grouped.
           </CardDescription>
         </CardHeader>
       </Card>
 
       {/* Filters */}
-      <Card className="border mb-6">
+      <Card className="vfl-card mb-6">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
@@ -317,7 +359,7 @@ export default function RatingAdjustmentsPage() {
               onClick={() => setRefreshTrigger((prev) => prev + 1)}
               disabled={loading}
               variant="default"
-              className="bg-primary hover:bg-primary/90"
+              className="vfl-gradient hover:opacity-90"
             >
               {loading ? "Refreshing..." : "Refresh"}
               {loading && <RefreshCw className="ml-2 h-4 w-4 animate-spin" />}
@@ -338,7 +380,7 @@ export default function RatingAdjustmentsPage() {
             {error}
           </div>
         ) : filteredAdjustments.length === 0 ? (
-          <Card className="border">
+          <Card className="vfl-card">
             <CardContent className="flex items-center justify-center py-16">
               <div className="text-center">
                 <Settings className="w-12 h-12 text-muted-foreground mx-auto mb-4" />

@@ -398,12 +398,12 @@ export function EnhancedPlayerDetailDialog({
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="w-[95vw] max-w-7xl max-h-[95vh] p-0 flex flex-col">
         {/* Enhanced Hero Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 sm:p-6 text-white relative overflow-hidden flex-shrink-0">
+        <div className="vfl-gradient p-4 sm:p-6 text-white relative overflow-hidden flex-shrink-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
           <DialogHeader className="relative z-10">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6 mb-4 lg:mb-6">
               <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
                   <span className="text-2xl font-bold">{player.position}</span>
                 </div>
                 <div>
@@ -412,8 +412,8 @@ export function EnhancedPlayerDetailDialog({
                   </DialogTitle>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4 text-sm sm:text-base lg:text-lg xl:text-xl">
                     <span className="font-bold">{player.position}</span>
-                    <span className={cn("px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-black text-white", getOvrColorClass(player.overall))}>
-                      {player.overall} OVR
+                    <span className={cn("px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-black text-white", getOvrColorClass(player.playerBestOvr || player.overall))}>
+                      {player.playerBestOvr || player.overall} OVR
                     </span>
                     <Badge variant="secondary" className="text-xs sm:text-sm lg:text-base px-2 sm:px-3 py-1">
                       {formatDevTrait(player.devTrait)}

@@ -110,9 +110,21 @@ export default function VflLandingPage() {
 
   return (
     <div className="flex flex-col min-h-[100dvh] text-foreground">
-      <header className="px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center sticky top-0 z-50 nfl-card/80 backdrop-blur-lg border-b border-primary/20">
+      {/* Video Background - Only on Home Page */}
+      <video 
+        className="video-background"
+        autoPlay 
+        muted 
+        loop 
+        playsInline
+      >
+        <source src="/videos/void-background.mp4" type="video/mp4" />
+      </video>
+      <div className="video-overlay"></div>
+      
+      <header className="px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center sticky top-0 z-50 vfl-card/80 backdrop-blur-lg border-b border-primary/20">
         <Link href="#" className="flex items-center justify-center gap-2" prefetch={false}>
-          <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center">
+          <div className="w-6 h-6 vfl-gradient rounded-full flex items-center justify-center">
             <Trophy className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="font-bold text-sm sm:text-base">VFL</span>
@@ -141,7 +153,7 @@ export default function VflLandingPage() {
           </Link>
           <div className="pl-2 sm:pl-3 ml-1 border-l border-primary/20">
             <Button asChild size="sm">
-              <Link href="https://discord.com" prefetch={false}>
+              <Link href="https://discord.com" prefetch={false} className="vfl-gradient">
                 <Menu className="mr-1 sm:mr-2 h-4 w-4" />
                 <span className="hidden sm:inline">Join</span>
               </Link>
@@ -198,7 +210,7 @@ export default function VflLandingPage() {
                 <Youtube className="h-6 w-6 sm:h-7 sm:w-7" />
               </Link>
             </div>
-            <Button asChild size="lg" className="touch-target">
+            <Button asChild size="lg" className="touch-target vfl-gradient">
               <Link href="https://discord.com" prefetch={false}>
                 <Menu className="mr-2 h-4 w-4" /> Join Discord
               </Link>
@@ -210,7 +222,7 @@ export default function VflLandingPage() {
       <main className="flex-1">
         <section className="relative w-full pt-12 sm:pt-16 md:pt-24 lg:pt-32 xl:pt-40 text-center">
           <div className="container px-3 sm:px-4 md:px-6 flex flex-col items-center">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-fadeIn shadow-lg">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 vfl-gradient rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-fadeIn shadow-lg">
               <Trophy className="w-8 h-8 sm:w-10 sm:h-10 text-primary-foreground" />
             </div>
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground/80 px-2">
@@ -221,7 +233,7 @@ export default function VflLandingPage() {
               your skill, and etch your name in the annals of Madden history.
             </p>
             <div className="mt-4 sm:mt-6">
-              <Button asChild size="default" className="bg-primary hover:bg-primary/90 text-xs sm:text-sm lg:text-base px-4 sm:px-6 py-2 sm:py-3 touch-target">
+              <Button asChild size="default" className="vfl-gradient hover:opacity-90 text-xs sm:text-sm lg:text-base px-4 sm:px-6 py-2 sm:py-3 touch-target">
                 <Link href="https://discord.com" prefetch={false}>
                   <Menu className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Join the VFL Waitlist</span>

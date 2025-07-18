@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { AlertCircle, RefreshCw } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AlertCircle, RefreshCw, BarChart3, List } from "lucide-react"
 import { getStandings, getTeams } from "@/lib/maddenDb"
 import type { Standing, Team } from "@/lib/madden-types"
 import { LiveStandingsTable } from "@/components/league-hub/live-standings-table"
+import { StandingsGraph } from "@/components/league-hub/standings-graph"
 
 const LEAGUE_ID = process.env.NEXT_PUBLIC_LEAGUE_ID || "25101040" // Default for local testing
 
@@ -48,27 +50,38 @@ export default function StandingsPage() {
   }, [refreshTrigger])
 
   return (
-    <div className="min-h-[90vh] nfl-card rounded-xl py-6 px-4 flex flex-col">
+    <div className="min-h-[90vh] vfl-card rounded-lg sm:rounded-xl py-4 sm:py-6 px-2 sm:px-4 flex flex-col">
       <Card className="border-none bg-transparent mb-6">
         <CardHeader>
-          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             League Standings
           </CardTitle>
-          <CardDescription className="text-lg">
+          <CardDescription className="text-sm sm:text-base lg:text-lg">
             Current standings and rankings for all teams in the league.
           </CardDescription>
         </CardHeader>
       </Card>
 
-      <div className="flex justify-end px-2 mb-6">
+      <div className="flex justify-end px-1 sm:px-2 mb-4 sm:mb-6">
         <Button
           onClick={() => setRefreshTrigger((prev) => prev + 1)}
           disabled={loading}
           variant="default"
-          className="text-sm nfl-gradient"
+          className="text-xs sm:text-sm vfl-gradient touch-target"
         >
-          {loading ? "Refreshing..." : "Refresh"}
-          {loading && <RefreshCw className="ml-2 h-4 w-4 animate-spin" />}
+          {loading ? (
+            <>
+              <RefreshCw className="mr-1 sm:mr-2 h-3 h-3 sm:h-4 sm:w-4 animate-spin" />
+              <span className="hidden sm:inline">Refreshing...</span>
+              <span className="sm:hidden">...</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="mr-1 sm:mr-2 h-3 h-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Refresh</span>
+              <span className="sm:hidden">↻</span>
+            </>
+          )}
         </Button>
       </div>
 
@@ -88,7 +101,26 @@ export default function StandingsPage() {
             No standings data available.
           </div>
         ) : (
-          <LiveStandingsTable standings={standings} teams={teams} />
+          <Tabs defaultValue="table" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 vfl-card mb-6">
+              <TabsTrigger value="table" className="flex items-center gap-2">
+                <List className="w-4 h-4" />
+                Table View
+              </TabsTrigger>
+              <TabsTrigger value="graph" className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Graph View
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="table">
+              <LiveStandingsTable standings={standings} teams={teams} />
+            </TabsContent>
+            
+            <TabsContent value="graph">
+              <StandingsGraph standings={standings} teams={teams} />
+            </TabsContent>
+          </Tabs>
         )}
       </div>
     </div>
