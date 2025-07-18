@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { Menu, X, Youtube, Twitter, Instagram } from "lucide-react"
+import { Menu, X, Youtube, Twitter, Instagram, Trophy } from "lucide-react"
 // Social icons temporarily commented out due to build issues
 import type { RssItem } from "@/lib/types"
 import { highlightsData } from "@/lib/highlights-data"
