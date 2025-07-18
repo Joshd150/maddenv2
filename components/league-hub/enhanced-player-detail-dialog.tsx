@@ -50,33 +50,96 @@ function RatingBar({
   value, 
   maxValue = 100, 
   showValue = true,
-  color = "primary" 
+  color = "auto" 
 }: {
   label: string
   value: number
   maxValue?: number
   showValue?: boolean
-  color?: "primary" | "green" | "yellow" | "red"
+  color?: "auto" | "green" | "yellow" | "red"
 }) {
   const percentage = (value / maxValue) * 100
   
   const getColorClass = () => {
-    if (color !== "primary") return `bg-${color}-500`
+    if (color !== "auto") return `bg-${color}-500`
     if (value >= 90) return "bg-green-500"
-    if (value >= 80) return "bg-lime-500"
+    if (value >= 80) return "bg-green-400"
     if (value >= 70) return "bg-yellow-500"
-    if (value >= 60) return "bg-orange-500"
+    if (value >= 50) return "bg-orange-500"
     return "bg-red-500"
   }
 
+  const getBackgroundClass = () => {
+    if (value >= 90) return "bg-green-100"
+    if (value >= 80) return "bg-green-50"
+    if (value >= 70) return "bg-yellow-50"
+    if (value >= 50) return "bg-orange-50"
+    return "bg-red-50"
+  }
   return (
-    <div className="space-y-2">
+    <div className={cn("space-y-2 p-3 rounded-lg", getBackgroundClass())}>
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium">{label}</span>
         {showValue && <span className="text-sm font-bold">{value}</span>}
       </div>
       <div className="relative">
-        <Progress value={percentage} className="h-2" />
+        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div 
+            className={cn("h-full transition-all duration-700 ease-out rounded-full", getColorClass())}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Dev trait image component
+function DevTraitImage({ trait }: { trait: DevTrait }) {
+  const getDevTraitInfo = (trait: DevTrait) => {
+    switch (trait) {
+      case DevTrait.XFACTOR:
+        return { 
+          name: "X-Factor", 
+          color: "from-yellow-400 to-orange-500",
+          icon: <Crown className="w-6 h-6 text-yellow-300" />
+        }
+      case DevTrait.SUPERSTAR:
+        return { 
+          name: "Superstar", 
+          color: "from-blue-400 to-purple-500",
+          icon: <Star className="w-6 h-6 text-blue-300" />
+        }
+      case DevTrait.STAR:
+        return { 
+          name: "Star", 
+          color: "from-green-400 to-blue-500",
+          icon: <Flame className="w-6 h-6 text-green-300" />
+        }
+      default:
+        return { 
+          name: "Normal", 
+          color: "from-gray-400 to-gray-600",
+          icon: <User className="w-6 h-6 text-gray-300" />
+        }
+    }
+  }
+
+  const traitInfo = getDevTraitInfo(trait)
+
+  return (
+    <div className={cn(
+      "relative w-16 h-16 rounded-full flex items-center justify-center",
+      "bg-gradient-to-br", traitInfo.color,
+      "shadow-lg border-2 border-white/20"
+    )}>
+      {traitInfo.icon}
+      <div className="absolute -bottom-1 -right-1 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+        {traitInfo.name}
+      </div>
+    </div>
+  )
+}
         <div 
           className={cn("absolute top-0 left-0 h-2 rounded-full transition-all duration-500", getColorClass())}
           style={{ width: `${percentage}%` }}
