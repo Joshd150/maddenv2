@@ -3,8 +3,9 @@
 import type React from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Users, Trophy, List, CalendarDays, Award } from "lucide-react"
+import { Users, Trophy, List, CalendarDays, Award, ArrowRightLeft, UserCheck } from "lucide-react"
 import { usePathname } from "next/navigation" // Import usePathname
+import { cn } from "@/lib/utils"
 
 export default function LeagueHubLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() // Get the current path
@@ -16,6 +17,8 @@ export default function LeagueHubLayout({ children }: { children: React.ReactNod
     { href: "/league-hub/schedule", label: "Schedule", icon: CalendarDays },
     { href: "/league-hub/playoffs", label: "Playoffs", icon: Trophy },
     { href: "/league-hub/teams", label: "Teams", icon: Users },
+    { href: "/league-hub/trades", label: "Trades", icon: ArrowRightLeft },
+    { href: "/league-hub/roster-moves", label: "Roster Moves", icon: UserCheck },
   ]
 
   return (

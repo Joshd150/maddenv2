@@ -24,6 +24,8 @@ const mainNavItems = [
   { href: "/league-hub/scoreboard", label: "Scoreboard" },
   { href: "/league-hub/playoffs", label: "Playoffs" },
   { href: "/league-hub/teams", label: "Teams" },
+  { href: "/league-hub/trades", label: "Trades" },
+  { href: "/league-hub/roster-moves", label: "Roster Moves" },
 ]
 
 function RssFeedCard({ title, feedUrl }: { title: string; feedUrl: string }) {

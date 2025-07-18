@@ -93,3 +93,22 @@ export async function getAllSchedules(leagueId: string): Promise<MaddenGame[]> {
 export async function getStandings(leagueId: string): Promise<Standing[]> {
   return fetchData<Standing>("standings", { leagueId })
 }
+
+export async function getTeamStats(leagueId: string): Promise<any[]> {
+  return fetchData<any>("teamStats", { leagueId })
+}
+
+export async function getTrades(leagueId: string): Promise<any[]> {
+  // TODO: Implement when backend is ready
+  return []
+}
+
+export async function getWaiverMoves(leagueId: string): Promise<any[]> {
+  // TODO: Implement when backend is ready
+  return []
+}
+
+export async function getRosterMoves(leagueId: string): Promise<any[]> {
+  // TODO: Implement when backend is ready
+  return []
+}
