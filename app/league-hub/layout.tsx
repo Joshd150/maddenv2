@@ -21,6 +21,7 @@ export default function LeagueHubLayout({ children }: { children: React.ReactNod
     { href: "/league-hub/teams", label: "Teams", icon: Users },
     { href: "/league-hub/trades", label: "Trades", icon: ArrowRightLeft },
     { href: "/league-hub/roster-moves", label: "Roster Moves", icon: UserCheck },
+    { href: "/league-hub/rating-adjustments", label: "Rating Adjustments", icon: Settings },
   ]
 
   return (

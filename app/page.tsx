@@ -112,14 +112,9 @@ export default function VflLandingPage() {
     <div className="flex flex-col min-h-[100dvh] text-foreground">
       <header className="px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center sticky top-0 z-50 nfl-card/80 backdrop-blur-lg border-b border-primary/20">
         <Link href="#" className="flex items-center justify-center gap-2" prefetch={false}>
-          <Image
-            src="/vfl-logo.jpeg"
-            alt="VFL Logo"
-            width={28}
-            height={28}
-            className="rounded-full border border-primary/30"
-            style={{ width: 'auto', height: 'auto' }}
-          />
+          <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center">
+            <Trophy className="h-4 w-4 text-primary-foreground" />
+          </div>
           <span className="font-bold text-sm sm:text-base">VFL</span>
         </Link>
         <nav className="ml-auto hidden lg:flex gap-3 sm:gap-4 lg:gap-6 items-center">
@@ -215,19 +210,8 @@ export default function VflLandingPage() {
       <main className="flex-1">
         <section className="relative w-full pt-12 sm:pt-16 md:pt-24 lg:pt-32 xl:pt-40 text-center">
           <div className="container px-3 sm:px-4 md:px-6 flex flex-col items-center">
-            <div
-              className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-4 sm:mb-6 animate-fadeIn"
-              style={{
-                filter: "drop-shadow(0 0 15px hsl(var(--primary))) drop-shadow(0 0 30px hsl(var(--secondary)))",
-              }}
-            >
-              <Image 
-                src="/vfl-logo.jpeg" 
-                fill
-                style={{ objectFit: 'contain' }}
-                alt="VFL Logo" 
-                className="rounded-full" 
-              />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-fadeIn shadow-lg">
+              <Trophy className="w-8 h-8 sm:w-10 sm:h-10 text-primary-foreground" />
             </div>
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground/80 px-2">
               The Void Opens for Madden 26

@@ -396,87 +396,94 @@ export function EnhancedPlayerDetailDialog({
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden p-0">
+      <DialogContent className="w-[95vw] max-w-7xl max-h-[95vh] p-0 flex flex-col">
         {/* Enhanced Hero Header */}
-        <div className="nfl-gradient p-8 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 sm:p-6 text-white relative overflow-hidden flex-shrink-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
           <DialogHeader className="relative z-10">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-6">
-                <div className="relative">
-                  <Image
-                    src={team ? getTeamLogo(team.abbrName) : "/placeholder.svg"}
-                    alt={`${team?.displayName || "Free Agent"} logo`}
-                    width={80}
-                    height={80}
-                    className="rounded-full object-cover ring-4 ring-white/20"
-                  />
-                  <div className="absolute -bottom-2 -right-2">
-                    {getDevTraitIcon(player.devTrait)}
-                  </div>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6 mb-4 lg:mb-6">
+              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <span className="text-2xl font-bold">{player.position}</span>
                 </div>
                 <div>
-                  <DialogTitle className="text-4xl font-black mb-2">
+                  <DialogTitle className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black mb-2">
                     {player.firstName} {player.lastName}
                   </DialogTitle>
-                  <div className="flex items-center gap-4 text-xl">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4 text-sm sm:text-base lg:text-lg xl:text-xl">
                     <span className="font-bold">{player.position}</span>
-                    <span className={cn("px-3 py-1 rounded-full text-lg font-black", getOvrColorClass(player.overall))}>
+                    <span className={cn("px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-black text-white", getOvrColorClass(player.overall))}>
                       {player.overall} OVR
                     </span>
-                    <Badge variant="secondary" className="text-lg px-3 py-1">
+                    <Badge variant="secondary" className="text-xs sm:text-sm lg:text-base px-2 sm:px-3 py-1">
                       {formatDevTrait(player.devTrait)}
                     </Badge>
                   </div>
-                  <DialogDescription className="text-lg opacity-90 mt-2">
+                  <DialogDescription className="text-sm sm:text-base lg:text-lg opacity-90 mt-2">
                     {player.age} years old • {getSeasonFormatting(player.yearsPro)} • {Math.floor(player.height / 12)}'{player.height % 12}" • {player.weight} lbs
                   </DialogDescription>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold">{team?.displayName || "Free Agent"}</div>
-                <div className="text-lg opacity-90">{team?.abbrName || "FA"}</div>
+              <div className="text-left lg:text-right">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{team?.displayName || "Free Agent"}</div>
+                <div className="text-base sm:text-lg opacity-90">{team?.abbrName || "FA"}</div>
+                <div className="mt-2">
+                  <Button
+                    onClick={() => setIsPlayerSelectionDialogOpen(true)}
+                    variant="secondary"
+                    size="sm"
+                    className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  >
+                    Compare Player
+                  </Button>
+                </div>
               </div>
             </div>
           </DialogHeader>
         </div>
 
-        <ScrollArea className="flex-1 p-6">
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <div className="p-3 sm:p-4 lg:p-6 flex-shrink-0">
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-6 nfl-card">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-4 sm:mb-6 nfl-card">
               <TabsTrigger value="overview" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Overview
+                <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Overview</span>
+                <span className="sm:hidden">Info</span>
               </TabsTrigger>
               <TabsTrigger value="ratings" className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
-                Ratings
+                <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Ratings</span>
+                <span className="sm:hidden">Rate</span>
               </TabsTrigger>
               <TabsTrigger value="stats" className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Statistics
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Statistics</span>
+                <span className="sm:hidden">Stats</span>
               </TabsTrigger>
               <TabsTrigger value="traits" className="flex items-center gap-2">
-                <Zap className="w-4 h-4" />
-                Traits
+                <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden lg:inline">Traits</span>
+                <span className="lg:hidden">Trait</span>
               </TabsTrigger>
               <TabsTrigger value="contract" className="flex items-center gap-2">
-                <Award className="w-4 h-4" />
-                Contract
+                <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden lg:inline">Contract</span>
+                <span className="lg:hidden">$</span>
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Key Ratings */}
                 <Card className="nfl-card lg:col-span-2">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="w-5 h-5" />
+                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                      <Target className="w-4 h-4 sm:w-5 sm:h-5" />
                       Key Ratings
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3 sm:space-y-4">
                     {baseRatings.slice(0, 6).map((rating) => (
                       <RatingBar
                         key={rating.label}
@@ -490,25 +497,25 @@ export function EnhancedPlayerDetailDialog({
                 {/* Quick Stats */}
                 <Card className="nfl-card">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Activity className="w-5 h-5" />
+                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                      <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
                       Quick Stats
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex justify-between">
+                  <CardContent className="space-y-2 sm:space-y-3">
+                    <div className="flex justify-between text-sm sm:text-base">
                       <span>Overall Rating</span>
-                      <span className="font-bold text-lg">{player.overall}</span>
+                      <span className="font-bold text-base sm:text-lg">{player.overall}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm sm:text-base">
                       <span>Best Overall</span>
-                      <span className="font-bold text-lg">{player.playerBestOvr}</span>
+                      <span className="font-bold text-base sm:text-lg">{player.playerBestOvr}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm sm:text-base">
                       <span>Development</span>
                       <span className="font-bold">{formatDevTrait(player.devTrait)}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm sm:text-base">
                       <span>Experience</span>
                       <span className="font-bold">{getSeasonFormatting(player.yearsPro)}</span>
                     </div>
@@ -554,7 +561,7 @@ export function EnhancedPlayerDetailDialog({
                   <CardContent className="space-y-4">
                     {baseRatings.map((rating) => (
                       <RatingBar
-                        key={rating.label}
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-4 sm:mb-6 bg-muted">
                         label={rating.label}
                         value={rating.value}
                       />
@@ -581,17 +588,21 @@ export function EnhancedPlayerDetailDialog({
                   </CardContent>
                 </Card>
               </div>
+            </Tabs>
+          </div>
 
+          <ScrollArea className="flex-1 px-3 sm:px-4 lg:px-6 pb-6">
+            <Tabs defaultValue="overview" className="w-full">
               {/* Additional Ratings if available */}
               {specificRatings.length > 8 && (
-                <Card className="nfl-card">
-                  <CardHeader>
+                  <Card className="border">
+                  <Card className="border lg:col-span-2">
                     <CardTitle className="flex items-center gap-2">
                       <BarChart3 className="w-5 h-5" />
                       Additional Skills
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <Card className="border">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {specificRatings.slice(8).map((rating) => (
                         <RatingBar
@@ -604,7 +615,7 @@ export function EnhancedPlayerDetailDialog({
                   </CardContent>
                 </Card>
               )}
-            </TabsContent>
+                  <Card className="border">
 
             <TabsContent value="stats" className="space-y-6">
               {loadingStats ? (
@@ -646,7 +657,7 @@ export function EnhancedPlayerDetailDialog({
             <TabsContent value="traits" className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Playing Style Traits */}
-                <Card className="nfl-card">
+                  <Card className="border">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Zap className="w-5 h-5" />
@@ -694,7 +705,7 @@ export function EnhancedPlayerDetailDialog({
                 </Card>
 
                 {/* Special Abilities */}
-                <Card className="nfl-card">
+                  <Card className="border">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Star className="w-5 h-5" />
@@ -717,7 +728,7 @@ export function EnhancedPlayerDetailDialog({
                       { label: "Strip Ball", value: player.stripBallTrait },
                       { label: "High Motor", value: player.highMotorTrait },
                       { label: "Big Hitter", value: player.bigHitTrait },
-                      { label: "Predictable", value: player.predictTrait },
+                  <Card className="border">
                       { label: "Clutch", value: player.clutchTrait },
                     ]
                       .filter(trait => trait.value !== undefined)
@@ -738,7 +749,7 @@ export function EnhancedPlayerDetailDialog({
             </TabsContent>
 
             <TabsContent value="contract" className="space-y-6">
-              <Card className="nfl-card">
+                <Card className="border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Award className="w-5 h-5" />
@@ -788,7 +799,19 @@ export function EnhancedPlayerDetailDialog({
               </Card>
             </TabsContent>
           </Tabs>
-        </ScrollArea>
+          </ScrollArea>
+        </div>
+
+        {isPlayerSelectionDialogOpen && (
+          <PlayerSelectionDialog
+            initialPlayer={player}
+            onSelectPlayer={(selected) => {
+              onInitiateCompare(player, selected)
+              setIsPlayerSelectionDialogOpen(false)
+            }}
+            onClose={() => setIsPlayerSelectionDialogOpen(false)}
+          />
+        )}
       </DialogContent>
     </Dialog>
   )
