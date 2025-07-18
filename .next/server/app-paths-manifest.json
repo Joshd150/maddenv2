@@ -6,5 +6,6 @@
   "/league-hub/teams/page": "app/league-hub/teams/page.js",
   "/league-hub/playoffs/page": "app/league-hub/playoffs/page.js",
   "/league-hub/stats/page": "app/league-hub/stats/page.js",
-  "/league-hub/trades/page": "app/league-hub/trades/page.js"
+  "/league-hub/trades/page": "app/league-hub/trades/page.js",
+  "/league-hub/roster-moves/page": "app/league-hub/roster-moves/page.js"
 }
