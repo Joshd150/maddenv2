@@ -44,6 +44,12 @@ export function getPlayerFullName(player: Player): string {
   return `${firstName} ${lastName}`.trim() || "Unknown Player"
 }
 
+// Helper to get team logo path
+export function getTeamLogo(teamAbbr: string): string {
+  const logoPath = `/images/teams/${(teamAbbr || "fa").toLowerCase()}.png`
+  return logoPath
+}
+
 // Helper function to format rating keys specifically for display/sorting
 export function formatStatKeyForDisplay(key: string): string {
   return key

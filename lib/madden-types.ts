@@ -92,6 +92,7 @@ export type Player = {
   rosterId: number
   firstName: string
   lastName: string
+  fullName?: string // Add fullName property
   position: string
   overall: number
   teamId: number
@@ -227,6 +228,7 @@ export type Team = {
   teamId: number
   teamName: string
   teamAbbr: string
+  abbrName: string // Add abbrName for compatibility
   wins: number
   losses: number
   ties: number
@@ -300,6 +302,8 @@ export type Standing = {
   confLosses?: number
   confTies?: number
   totalTies?: number
+  totalWins?: number
+  totalLosses?: number
   winLossStreak?: number
   calendarYear?: number
   stageIndex?: number
@@ -310,6 +314,7 @@ export type PlayerStatEntry = {
   scheduleId: number
   weekIndex: number
   seasonIndex: number
+  statId?: number // Add statId for compatibility
   // Common stats
   gamesPlayed?: number
   // Passing stats
@@ -375,7 +380,8 @@ export type MaddenGame = {
   awayTeamId: number
   homeScore: number
   awayScore: number
-  gameStatus: GameResult
+  gameStatus?: GameResult
+  status?: GameResult // Add status for compatibility with Discord bot
   stageIndex: number
 }
 
@@ -383,13 +389,36 @@ export type TeamStats = {
   teamId: number
   teamName: string
   teamAbbr: string
-  pointsScored: number
-  pointsAllowed: number
-  totalYards: number
-  passingYards: number
-  rushingYards: number
-  turnoversForced: number
-  turnoversCommitted: number
+  statId?: number
+  // Offensive stats
+  offTotalYds?: number
+  offPassYds?: number
+  offRushYds?: number
+  offSacks?: number
+  offIntsLost?: number
+  offFumLost?: number
+  tOGiveaways?: number
+  // Defensive stats
+  defTotalYds?: number
+  defPassYds?: number
+  defRushYds?: number
+  defSacks?: number
+  defIntsRec?: number
+  defFumRec?: number
+  tOTakeaways?: number
+  // Team stats
+  penalties?: number
+  penaltyYds?: number
+  ptsFor?: number
+  ptsAgainst?: number
+  // Legacy fields for compatibility
+  pointsScored?: number
+  pointsAllowed?: number
+  totalYards?: number
+  passingYards?: number
+  rushingYards?: number
+  turnoversForced?: number
+  turnoversCommitted?: number
 }
 
 export type LeagueSettings = {
