@@ -398,19 +398,30 @@ export function EnhancedPlayerDetailDialog({
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="w-[95vw] max-w-7xl max-h-[95vh] p-0 flex flex-col">
         {/* Enhanced Hero Header */}
-        <div className="vfl-gradient p-4 sm:p-6 text-white relative overflow-hidden flex-shrink-0">
+        <div className="bg-white border-b border-border p-4 sm:p-6 text-foreground relative overflow-hidden flex-shrink-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
           <DialogHeader className="relative z-10">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6 mb-4 lg:mb-6">
               <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
-                  <span className="text-2xl font-bold">{player.position}</span>
+                <div className="flex items-center gap-3">
+                  {team && (
+                    <Image
+                      src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
+                      alt={`${team.displayName} logo`}
+                      width={48}
+                      height={48}
+                      className="rounded-full object-cover"
+                    />
+                  )}
+                  <div className="w-16 h-16 vfl-gradient rounded-full flex items-center justify-center border-2 border-primary/30">
+                    <span className="text-xl font-bold text-white">{player.position}</span>
+                  </div>
                 </div>
                 <div>
-                  <DialogTitle className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black mb-2">
+                  <DialogTitle className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black mb-2 text-foreground">
                     {player.firstName} {player.lastName}
                   </DialogTitle>
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4 text-sm sm:text-base lg:text-lg xl:text-xl">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4 text-sm sm:text-base lg:text-lg xl:text-xl text-foreground">
                     <span className="font-bold">{player.position}</span>
                     <span className={cn("px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-black text-white", getOvrColorClass(player.playerBestOvr || player.overall))}>
                       {player.playerBestOvr || player.overall} OVR
@@ -419,20 +430,20 @@ export function EnhancedPlayerDetailDialog({
                       {formatDevTrait(player.devTrait)}
                     </Badge>
                   </div>
-                  <DialogDescription className="text-sm sm:text-base lg:text-lg opacity-90 mt-2">
+                  <DialogDescription className="text-sm sm:text-base lg:text-lg text-muted-foreground mt-2">
                     {player.age} years old • {getSeasonFormatting(player.yearsPro)} • {Math.floor(player.height / 12)}'{player.height % 12}" • {player.weight} lbs
                   </DialogDescription>
                 </div>
               </div>
               <div className="text-left lg:text-right">
-                <div className="text-lg sm:text-xl lg:text-2xl font-bold">{team?.displayName || "Free Agent"}</div>
-                <div className="text-base sm:text-lg opacity-90">{team?.abbrName || "FA"}</div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{team?.displayName || "Free Agent"}</div>
+                <div className="text-base sm:text-lg text-muted-foreground">{team?.abbrName || "FA"}</div>
                 <div className="mt-2">
                   <Button
                     onClick={() => setIsPlayerSelectionDialogOpen(true)}
-                    variant="secondary"
+                    variant="outline"
                     size="sm"
-                    className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                    className="vfl-gradient text-white hover:opacity-90"
                   >
                     Compare Player
                   </Button>

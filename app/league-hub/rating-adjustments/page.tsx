@@ -86,6 +86,33 @@ const mockRatingAdjustments: RatingAdjustment[] = [
     ],
     reason: "Accuracy improvement based on recent games",
     adjustedBy: "Admin"
+  },
+  {
+    id: "3",
+    timestamp: new Date(Date.now() - 600000), // 10 minutes ago
+    player: {
+      rosterId: 3,
+      firstName: "Derrick",
+      lastName: "Henry",
+      position: "HB",
+      overall: 89,
+      playerBestOvr: 89,
+      teamId: 3,
+      age: 30,
+      yearsPro: 8,
+      height: 75,
+      weight: 247,
+      speedRating: 88,
+      truckRating: 95,
+      breakTackleRating: 92
+    } as Player,
+    author: "AUTO", // Automatic game progression
+    adjustments: [
+      { attribute: "Speed", oldValue: 86, newValue: 88, change: 2 },
+      { attribute: "Overall", oldValue: 87, newValue: 89, change: 2 }
+    ],
+    reason: "Automatic progression based on game performance",
+    adjustedBy: "AUTO"
   }
 ]
 
@@ -155,6 +182,23 @@ function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) 
     return null
   }
 
+  const getAuthorBadge = (author: string) => {
+    if (author === "AUTO") {
+      return (
+        <Badge variant="secondary" className="bg-blue-500 text-white">
+          <i className="fas fa-robot mr-1" />
+          AUTO
+        </Badge>
+      )
+    }
+    return (
+      <Badge variant="outline" className="bg-primary/10 text-primary">
+        <i className="fas fa-user mr-1" />
+        {author}
+      </Badge>
+    )
+  }
+
   return (
     <>
       <Card className="vfl-card hover:shadow-lg transition-all duration-200">
@@ -180,8 +224,8 @@ function RatingAdjustmentCard({ adjustment }: { adjustment: RatingAdjustment }) 
               <div className="text-sm text-muted-foreground">
                 {adjustment.timestamp.toLocaleDateString()} at {adjustment.timestamp.toLocaleTimeString()}
               </div>
-              <div className="text-xs text-muted-foreground">
-                Adjusted by {adjustment.author || adjustment.adjustedBy}
+              <div className="text-xs text-muted-foreground mt-1">
+                {getAuthorBadge(adjustment.author || adjustment.adjustedBy || "AUTO")}
               </div>
             </div>
           </div>
