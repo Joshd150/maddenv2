@@ -46,6 +46,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/league-hub/trades/page.js"
     ],
+    "/league-hub/roster-moves/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/league-hub/roster-moves/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
