@@ -3,17 +3,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { TeamLogo } from "@/components/league-hub/team-logo"
-import type { MaddenGame, TeamStats } from "@/lib/madden-types"
+import type { MaddenGame, TeamStats, Team } from "@/lib/madden-types"
 
 interface GameDetailDialogProps {
-  game: MaddenGame | null
-  homeTeamName: string
-  awayTeamName: string
-  homeTeamAbbr: string
-  awayTeamAbbr: string
-  homeTeamStats: TeamStats | null
-  awayTeamStats: TeamStats | null
+  game: MaddenGame
+  teams: Team[]
   onClose: () => void
+  leagueId: string
 }
 
 // Helper to format stat keys for display
@@ -40,15 +36,14 @@ function formatStatKey(key: string) {
 
 export function GameDetailDialog({
   game,
-  homeTeamName,
-  awayTeamName,
-  homeTeamAbbr,
-  awayTeamAbbr,
-  homeTeamStats,
-  awayTeamStats,
+  teams,
   onClose,
+  leagueId,
 }: GameDetailDialogProps) {
-  if (!game) {
+  const homeTeam = teams.find(t => t.teamId === game.homeTeamId)
+  const awayTeam = teams.find(t => t.teamId === game.awayTeamId)
+
+  if (!homeTeam || !awayTeam) {
     return null
   }
 
@@ -71,9 +66,9 @@ export function GameDetailDialog({
           <DialogTitle className="text-2xl font-bold text-center">Game Breakdown</DialogTitle>
           <DialogDescription className="text-center text-lg font-semibold">
             <div className="flex items-center justify-center gap-3">
-              <TeamLogo teamAbbr={awayTeamAbbr} width={32} height={32} />
-              {awayTeamName} vs {homeTeamName}
-              <TeamLogo teamAbbr={homeTeamAbbr} width={32} height={32} />
+              <TeamLogo teamAbbr={awayTeam.abbrName || awayTeam.teamAbbr} width={32} height={32} />
+              {awayTeam.displayName} vs {homeTeam.displayName}
+              <TeamLogo teamAbbr={homeTeam.abbrName || homeTeam.teamAbbr} width={32} height={32} />
             </div>
             <div className="text-xl font-bold text-primary mt-2">
               {game.awayScore} - {game.homeScore}
@@ -85,49 +80,19 @@ export function GameDetailDialog({
             {/* Away Team Stats */}
             <div className="bg-zinc-800/50 p-4 rounded-lg border border-primary/10">
               <h3 className="text-xl font-bold text-center mb-4 flex items-center justify-center gap-2">
-                <TeamLogo teamAbbr={awayTeamAbbr} width={28} height={28} />
-                {awayTeamName} Stats
+                <TeamLogo teamAbbr={awayTeam.abbrName || awayTeam.teamAbbr} width={28} height={28} />
+                {awayTeam.displayName} Stats
               </h3>
-              {awayTeamStats ? (
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                  {commonStatKeys.map((key) => {
-                    const value = (awayTeamStats as any)[key]
-                    if (value === undefined || value === null) return null
-                    return (
-                      <div key={key} className="flex justify-between items-center py-1">
-                        <span className="text-muted-foreground">{formatStatKey(key)}:</span>
-                        <span className="font-medium text-right">{String(value)}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-center">No stats available for this team.</p>
-              )}
+              <p className="text-muted-foreground text-center">Team stats coming soon...</p>
             </div>
 
             {/* Home Team Stats */}
             <div className="bg-zinc-800/50 p-4 rounded-lg border border-primary/10">
               <h3 className="text-xl font-bold text-center mb-4 flex items-center justify-center gap-2">
-                <TeamLogo teamAbbr={homeTeamAbbr} width={28} height={28} />
-                {homeTeamName} Stats
+                <TeamLogo teamAbbr={homeTeam.abbrName || homeTeam.teamAbbr} width={28} height={28} />
+                {homeTeam.displayName} Stats
               </h3>
-              {homeTeamStats ? (
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                  {commonStatKeys.map((key) => {
-                    const value = (homeTeamStats as any)[key]
-                    if (value === undefined || value === null) return null
-                    return (
-                      <div key={key} className="flex justify-between items-center py-1">
-                        <span className="text-muted-foreground">{formatStatKey(key)}:</span>
-                        <span className="font-medium text-right">{String(value)}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-center">No stats available for this team.</p>
-              )}
+              <p className="text-muted-foreground text-center">Team stats coming soon...</p>
             </div>
           </div>
         </ScrollArea>
