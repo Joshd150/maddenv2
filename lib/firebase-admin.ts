@@ -14,7 +14,8 @@ import admin from "firebase-admin"
 function createAdminApp(): admin.app.App {
   // --- LOCAL EMULATOR ---
   if (process.env.FIRESTORE_EMULATOR_HOST) {
-    const projectId = process.env.FIREBASE_PROJECT_ID || "vfl-website-local"
+    console.log(`Connecting to Firestore emulator at: ${process.env.FIRESTORE_EMULATOR_HOST}`)
+    const projectId = process.env.FIREBASE_PROJECT_ID || "dev"
     return admin.initializeApp({ projectId })
   }
 
@@ -43,4 +44,5 @@ export const db = admin.firestore(adminApp)
 // When using the emulator tell Firestore where it is.
 if (process.env.FIRESTORE_EMULATOR_HOST) {
   db.settings({ host: process.env.FIRESTORE_EMULATOR_HOST, ssl: false })
+  console.log(`Firestore configured for emulator at: ${process.env.FIRESTORE_EMULATOR_HOST}`)
 }
