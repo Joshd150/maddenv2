@@ -101,7 +101,7 @@ export function TeamPlayersDialog({ teamId, onClose, allTeams, allPlayers, leagu
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3 text-3xl font-bold">
               <Image
-                src={getTeamLogo(team.abbrName) || "/placeholder.svg"}
+                src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
                 alt={`${team.displayName} logo`}
                 width={48}
                 height={48}

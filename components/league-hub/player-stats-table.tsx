@@ -101,13 +101,13 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
                     {team ? (
                       <div className="flex items-center gap-2">
                         <Image
-                          src={getTeamLogo(team.abbrName) || "/placeholder.svg"}
+                          src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
                           alt={`${team.displayName} logo`}
                           width={20}
                           height={20}
                           className="rounded-full"
                         />
-                        {team.abbrName}
+                        {team.abbrName || team.teamAbbr}
                       </div>
                     ) : (
                       "N/A"
