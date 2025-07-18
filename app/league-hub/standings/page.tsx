@@ -48,20 +48,24 @@ export default function StandingsPage() {
   }, [refreshTrigger])
 
   return (
-    <div className="min-h-[90vh] bg-zinc-900/50 rounded-xl py-5 px-2 flex flex-col shadow-lg border border-primary/10">
-      <Card className="border-none bg-transparent">
+    <div className="min-h-[90vh] nfl-card rounded-xl py-6 px-4 flex flex-col">
+      <Card className="border-none bg-transparent mb-6">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">League Standings</CardTitle>
-          <CardDescription>View the current standings for all teams in the league.</CardDescription>
+          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            League Standings
+          </CardTitle>
+          <CardDescription className="text-lg">
+            Current standings and rankings for all teams in the league.
+          </CardDescription>
         </CardHeader>
       </Card>
 
-      <div className="flex justify-end px-4 mb-4">
+      <div className="flex justify-end px-2 mb-6">
         <Button
           onClick={() => setRefreshTrigger((prev) => prev + 1)}
           disabled={loading}
-          variant="outline"
-          className="text-sm"
+          variant="default"
+          className="text-sm nfl-gradient"
         >
           {loading ? "Refreshing..." : "Refresh"}
           {loading && <RefreshCw className="ml-2 h-4 w-4 animate-spin" />}
@@ -70,16 +74,17 @@ export default function StandingsPage() {
 
       <div className="flex-1 flex flex-col">
         {loading ? (
-          <div className="flex-1 flex items-center justify-center text-lg text-primary animate-pulse py-16">
-            Loading standings...
+          <div className="flex-1 flex flex-col items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+            <div className="text-lg text-primary font-semibold">Loading standings...</div>
           </div>
         ) : error ? (
-          <div className="flex-1 flex items-center justify-center text-red-400 text-lg p-4 text-center">
+          <div className="flex-1 flex items-center justify-center text-destructive text-lg p-4 text-center">
             <AlertCircle className="h-6 w-6 mr-2" />
             {error}
           </div>
         ) : standings.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-lg text-muted-foreground p-4 text-center">
+          <div className="flex-1 flex items-center justify-center text-lg text-muted-foreground p-8 text-center">
             No standings data available.
           </div>
         ) : (

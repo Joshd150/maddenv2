@@ -295,21 +295,28 @@ export default function StatsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">Player Stats</h1>
+    <div className="container mx-auto p-4 min-h-[90vh]">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+          Player Statistics
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Comprehensive player performance data and league leaders
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
         {" "}
         {/* Changed to lg:grid-cols-4 */}
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-1 nfl-card">
           {" "}
           {/* Filter card takes 1 column */}
           <CardHeader>
-            <CardTitle>Filter Stats</CardTitle>
+            <CardTitle className="text-xl font-bold">Filter Stats</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="search" className="block text-sm font-medium text-foreground mb-2">
                 Search Player
               </label>
               <Input
@@ -320,14 +327,14 @@ export default function StatsPage() {
               />
             </div>
             <div>
-              <label htmlFor="position" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="position" className="block text-sm font-medium text-foreground mb-2">
                 Position
               </label>
               <Select value={selectedPosition} onValueChange={setSelectedPosition}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full nfl-card">
                   <SelectValue placeholder="Select a position" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="nfl-card">
                   <SelectItem value="All Positions">All Positions</SelectItem>
                   {Array.from(new Set(allPlayers.map((p) => p.position)))
                     .sort()
@@ -340,14 +347,14 @@ export default function StatsPage() {
               </Select>
             </div>
             <div>
-              <label htmlFor="team" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="team" className="block text-sm font-medium text-foreground mb-2">
                 Team
               </label>
               <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full nfl-card">
                   <SelectValue placeholder="Select a team" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="nfl-card">
                   <SelectItem value="All Teams">All Teams</SelectItem>
                   {allTeams
                     .sort((a, b) => (a.displayName ?? "").localeCompare(b.displayName ?? "")) // Sort by displayName
@@ -372,24 +379,27 @@ export default function StatsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="lg:col-span-3">
+        <Card className="lg:col-span-3 nfl-card">
           {" "}
           {/* Stats table takes 3 columns */}
           <CardHeader>
-            <CardTitle>{statCategories.find((cat) => cat.key === activeTab)?.title} Leaders</CardTitle>
+            <CardTitle className="text-2xl font-bold flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-primary" />
+              {statCategories.find((cat) => cat.key === activeTab)?.title} Leaders
+            </CardTitle>
           </CardHeader>
           <CardContent className="max-h-[calc(100vh-250px)] overflow-y-auto">
             {" "}
             {/* Added max-height and overflow */}
             <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as PlayerStatType)}>
-              <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+              <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 nfl-card">
                 {statCategories.map((category) => (
-                  <TabsTrigger key={category.key} value={category.key}>
+                  <TabsTrigger key={category.key} value={category.key} className="font-semibold">
                     {category.title}
                   </TabsTrigger>
                 ))}
               </TabsList>
-              <TabsContent value={activeTab} className="mt-4">
+              <TabsContent value={activeTab} className="mt-6">
                 <PlayerStatsTable
                   stats={filteredAggregatedPlayers} // Pass aggregated and filtered data
                   players={allPlayers} // Still pass allPlayers for detail dialog

@@ -50,27 +50,27 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
   const teamMap = useMemo(() => new Map(teams.map((t) => [t.teamId, t])), [teams])
 
   return (
-    <div className="rounded-md border bg-zinc-900 border-primary/20">
+    <div className="rounded-lg border border-border nfl-card overflow-hidden">
       <Table>
-        <TableHeader>
-          <TableRow className="bg-zinc-800 hover:bg-zinc-800">
-            <TableHead className="w-[50px]">Rank</TableHead>
-            <TableHead>
+        <TableHeader className="bg-muted/50">
+          <TableRow className="hover:bg-muted/50">
+            <TableHead className="w-[60px] font-bold">Rank</TableHead>
+            <TableHead className="font-bold">
               <Button
                 variant="ghost"
                 onClick={() => handleSort("player.lastName")}
-                className="px-0 hover:bg-transparent"
+                className="px-0 hover:bg-transparent font-bold"
               >
                 Player
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </Button>
             </TableHead>
-            <TableHead>Team</TableHead>
-            <TableHead>Pos</TableHead>
-            <TableHead>OVR</TableHead>
+            <TableHead className="font-bold">Team</TableHead>
+            <TableHead className="font-bold">Pos</TableHead>
+            <TableHead className="font-bold">OVR</TableHead>
             {columns.map((col) => (
-              <TableHead key={col.key}>
-                <Button variant="ghost" onClick={() => handleSort(col.key)} className="px-0 hover:bg-transparent">
+              <TableHead key={col.key} className="font-bold">
+                <Button variant="ghost" onClick={() => handleSort(col.key)} className="px-0 hover:bg-transparent font-bold">
                   {col.header}
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -81,7 +81,7 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
         <TableBody>
           {sortedStats.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length + 5} className="h-24 text-center text-gray-400">
+              <TableCell colSpan={columns.length + 5} className="h-24 text-center text-muted-foreground">
                 No players found with these stats.
               </TableCell>
             </TableRow>
@@ -93,30 +93,30 @@ export function PlayerStatsTable({ stats, players, teams, columns, onPlayerClick
                 <TableRow
                   key={item.rosterId}
                   onClick={() => onPlayerClick(player)}
-                  className="cursor-pointer hover:bg-zinc-800/50"
+                  className="cursor-pointer hover:bg-muted/30 transition-colors"
                 >
-                  <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell>{getPlayerFullName(player)}</TableCell>
+                  <TableCell className="font-bold text-primary">#{index + 1}</TableCell>
+                  <TableCell className="font-semibold">{getPlayerFullName(player)}</TableCell>
                   <TableCell>
                     {team ? (
                       <div className="flex items-center gap-2">
                         <Image
                           src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
                           alt={`${team.displayName} logo`}
-                          width={20}
-                          height={20}
+                          width={24}
+                          height={24}
                           className="rounded-full"
                         />
-                        {team.abbrName || team.teamAbbr}
+                        <span className="font-semibold">{team.abbrName || team.teamAbbr}</span>
                       </div>
                     ) : (
                       "N/A"
                     )}
                   </TableCell>
-                  <TableCell>{player.position}</TableCell>
-                  <TableCell>{player.playerBestOvr}</TableCell>
+                  <TableCell className="font-semibold">{player.position}</TableCell>
+                  <TableCell className="font-bold text-secondary">{player.playerBestOvr}</TableCell>
                   {columns.map((col) => (
-                    <TableCell key={col.key}>
+                    <TableCell key={col.key} className="font-semibold">
                       {typeof item[col.key] === "number" ? item[col.key].toFixed(1).replace(/\.0$/, "") : "0"}
                     </TableCell>
                   ))}

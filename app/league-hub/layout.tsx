@@ -20,18 +20,23 @@ export default function LeagueHubLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen w-full bg-background text-foreground">
-      <aside className="hidden w-64 flex-col border-r bg-muted/40 p-4 md:flex">
+      <aside className="hidden w-64 flex-col border-r nfl-card p-4 md:flex">
         <div className="mb-8 flex items-center gap-2">
           <Trophy className="h-6 w-6 text-primary" />
-          <h2 className="text-xl font-bold">League Hub</h2>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            League Hub
+          </h2>
         </div>
         <nav className="flex flex-col gap-2">
           {navItems.map(({ href, label, icon: Icon }) => (
             <Button
               key={href}
               // Dynamically set variant based on current path
-              variant={pathname === href ? "secondary" : "ghost"}
-              className="justify-start gap-2 text-left"
+              variant={pathname === href ? "default" : "ghost"}
+              className={cn(
+                "justify-start gap-2 text-left transition-all duration-200",
+                pathname === href && "nfl-gradient font-semibold"
+              )}
               asChild
             >
               <Link href={href}>
@@ -42,7 +47,9 @@ export default function LeagueHubLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
       </aside>
-      <main className="flex-1 p-4 sm:p-6 md:p-8">{children}</main>
+      <main className="flex-1 p-4 sm:p-6 md:p-8 bg-gradient-to-br from-background to-muted/20">
+        {children}
+      </main>
     </div>
   )
 }

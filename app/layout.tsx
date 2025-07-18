@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export const metadata: Metadata = {
   title: "Void Fantasy League | Madden 26",
   description: "The premier franchise experience for Madden 26. Entering our 10th franchise season.",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -18,32 +18,20 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={cn("min-h-screen bg-background font-sans antialiased", GeistSans.className)}>
-        {/* Fixed background video layer */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="fixed inset-0 w-full h-full object-cover -z-20 opacity-10"
-          style={{
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-          }}
-        >
-          <source src="/background-video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        {/* Original gradient background as a fallback/overlay */}
+        {/* NFL-style background */}
         <div
-          className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-950 via-purple-950 to-black"
+          className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900"
           style={{
             backgroundAttachment: "fixed",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center center",
           }}
+        />
+        {/* Subtle pattern overlay */}
+        <div 
+          className="fixed inset-0 -z-5 opacity-5"
+          style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)", backgroundSize: "20px 20px" }}
         />
         {children}
       </body>

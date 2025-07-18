@@ -147,20 +147,24 @@ export default function TeamsPage() {
   }
 
   return (
-    <div className="min-h-[90vh] bg-zinc-900/50 rounded-xl py-5 px-2 flex flex-col shadow-lg border border-primary/10">
-      <Card className="border-none bg-transparent">
+    <div className="min-h-[90vh] nfl-card rounded-xl py-6 px-4 flex flex-col">
+      <Card className="border-none bg-transparent mb-6">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">League Teams</CardTitle>
-          <CardDescription>View all teams in the league and their current status.</CardDescription>
+          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            League Teams
+          </CardTitle>
+          <CardDescription className="text-lg">
+            View all teams in the league and their current status.
+          </CardDescription>
         </CardHeader>
       </Card>
 
-      <div className="flex justify-end px-4 mb-4">
+      <div className="flex justify-end px-2 mb-6">
         <Button
           onClick={() => setRefreshTrigger((prev) => prev + 1)}
           disabled={loading}
-          variant="outline"
-          className="text-sm"
+          variant="default"
+          className="text-sm nfl-gradient"
         >
           {loading ? "Refreshing..." : "Refresh"}
           {loading && <RefreshCw className="ml-2 h-4 w-4 animate-spin" />}
@@ -169,28 +173,29 @@ export default function TeamsPage() {
 
       <div className="flex-1 flex flex-col">
         {loading ? (
-          <div className="flex-1 flex items-center justify-center text-lg text-primary animate-pulse py-16">
-            Loading teams...
+          <div className="flex-1 flex flex-col items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+            <div className="text-lg text-primary font-semibold">Loading teams...</div>
           </div>
         ) : error ? (
-          <div className="flex-1 flex items-center justify-center text-red-400 text-lg p-4 text-center">
+          <div className="flex-1 flex items-center justify-center text-destructive text-lg p-4 text-center">
             <AlertCircle className="h-6 w-6 mr-2" />
             {error}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-2">
             {sortedConferenceNames.map((confName) => (
               <div key={confName} className="col-span-full mb-8">
-                <h2 className="text-3xl font-bold mb-6 text-primary-foreground text-center md:text-left">
+                <h2 className="text-3xl font-bold mb-6 text-primary text-center md:text-left">
                   {confName || "Unknown Conference"}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {Object.keys(teamsByConferenceAndDivision[confName])
                     .sort()
                     .map((divName) => (
-                      <Card key={divName} className="bg-zinc-800/70 border-primary/20 shadow-lg">
+                      <Card key={divName} className="nfl-card">
                         <CardHeader className="pb-3">
-                          <CardTitle className="text-xl font-semibold text-primary-foreground">
+                          <CardTitle className="text-xl font-semibold text-primary">
                             {divName || "Unknown Division"}
                           </CardTitle>
                         </CardHeader>
@@ -199,29 +204,29 @@ export default function TeamsPage() {
                             {teamsByConferenceAndDivision[confName][divName].map((team) => (
                               <li
                                 key={team.id}
-                                className="flex items-center gap-3 cursor-pointer hover:bg-zinc-700/50 p-2 rounded-md transition-colors duration-200"
+                                className="flex items-center gap-3 cursor-pointer hover:bg-muted/50 p-3 rounded-lg transition-all duration-200 hover:scale-105"
                                 onClick={() => handleTeamCardClick(team.teamId)}
                               >
                                 <Image
                                   src={getTeamLogo(team.abbrName) || "/placeholder.svg"}
                                   alt={`${team.displayName} logo`}
-                                  width={40}
-                                  height={40}
+                                  width={44}
+                                  height={44}
                                   className="rounded-full object-cover"
                                 />
                                 <div className="flex flex-col">
-                                  <span className="font-medium text-lg text-primary-foreground">
+                                  <span className="font-bold text-lg text-foreground">
                                     {team.displayName}
                                   </span>
                                   {team.coachNameDisplay && (
-                                    <span className="text-sm text-muted-foreground">
+                                    <span className="text-sm text-muted-foreground font-medium">
                                       Coach: {team.coachNameDisplay}
                                     </span>
                                   )}
                                 </div>
                                 <span
-                                  className={`ml-auto px-3 py-1 rounded-full text-xs font-semibold ${
-                                    team.isFilled ? "bg-green-600 text-white" : "bg-yellow-600 text-white"
+                                  className={`ml-auto px-3 py-1 rounded-full text-xs font-bold ${
+                                    team.isFilled ? "bg-green-500 text-white" : "bg-yellow-500 text-black"
                                   }`}
                                 >
                                   {team.isFilled ? "Filled" : "Open"}

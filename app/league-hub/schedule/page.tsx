@@ -9,7 +9,8 @@ import { getTeams, getAllSchedules } from "@/lib/maddenDb"
 import type { MaddenGame, Team } from "@/lib/madden-types"
 import { GameDetailDialog } from "@/components/league-hub/game-detail-dialog"
 import { getMessageForWeek } from "@/lib/madden-types"
-import { GameScorebug } from "@/components/league-hub/game-scorebug"
+import { EnhancedGameScorebug } from "@/components/league-hub/enhanced-game-scorebug"
+import { EnhancedGameDetailDialog } from "@/components/league-hub/enhanced-game-detail-dialog"
 
 const LEAGUE_ID = process.env.NEXT_PUBLIC_LEAGUE_ID || "25101040" // Default for local testing
 
@@ -99,24 +100,28 @@ export default function SchedulePage() {
   }, [selectedWeek, availableWeeks])
 
   return (
-    <div className="min-h-[90vh] bg-zinc-900/50 rounded-xl py-5 px-2 flex flex-col shadow-lg border border-primary/10">
-      <Card className="border-none bg-transparent">
+    <div className="min-h-[90vh] nfl-card rounded-xl py-6 px-4 flex flex-col">
+      <Card className="border-none bg-transparent mb-6">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">League Schedule</CardTitle>
-          <CardDescription>View the schedule and results for each week.</CardDescription>
+          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            League Schedule
+          </CardTitle>
+          <CardDescription className="text-lg">
+            View the schedule and results for each week of the season.
+          </CardDescription>
         </CardHeader>
       </Card>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center px-4 mb-4 gap-4">
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <label htmlFor="week-select" className="text-sm font-medium text-gray-300 whitespace-nowrap">
+      <div className="flex flex-col sm:flex-row justify-between items-center px-2 mb-6 gap-4">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <label htmlFor="week-select" className="text-sm font-medium text-foreground whitespace-nowrap">
             Select Week:
           </label>
           <Select value={selectedWeek} onValueChange={setSelectedWeek}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-[200px] nfl-card">
               <SelectValue placeholder="Select a week" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="nfl-card">
               {availableWeeks.map((weekNum) => (
                 <SelectItem key={weekNum} value={String(weekNum)}>
                   {getMessageForWeek(weekNum)}
@@ -128,8 +133,8 @@ export default function SchedulePage() {
         <Button
           onClick={() => setRefreshTrigger((prev) => prev + 1)}
           disabled={loading}
-          variant="outline"
-          className="text-sm w-full sm:w-auto"
+          variant="default"
+          className="text-sm w-full sm:w-auto nfl-gradient"
         >
           {loading ? "Refreshing..." : "Refresh"}
           {loading && <RefreshCw className="ml-2 h-4 w-4 animate-spin" />}
@@ -138,20 +143,28 @@ export default function SchedulePage() {
 
       <div className="flex-1 flex flex-col">
         {loading ? (
-          <div className="flex-1 flex items-center justify-center text-lg text-primary animate-pulse py-16">
-            Loading schedule...
+          <div className="flex-1 flex flex-col items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+            <div className="text-lg text-primary font-semibold">Loading schedule...</div>
           </div>
         ) : error ? (
-          <div className="flex-1 flex items-center justify-center text-red-400 text-lg p-4 text-center">
+          <div className="flex-1 flex items-center justify-center text-destructive text-lg p-4 text-center">
             <AlertCircle className="h-6 w-6 mr-2" />
             {error}
           </div>
         ) : filteredSchedule.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-lg text-muted-foreground p-4 text-center">
+          <div className="flex-1 flex items-center justify-center text-lg text-muted-foreground p-8 text-center">
             No schedule data available for {currentWeekDisplay}.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+          <>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-primary">{currentWeekDisplay}</h2>
+              <p className="text-muted-foreground">
+                {filteredSchedule.length} game{filteredSchedule.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-2">
             {filteredSchedule.map((game) => {
               const homeTeam = teamMap.get(game.homeTeamId)
               const awayTeam = teamMap.get(game.awayTeamId)
@@ -164,7 +177,7 @@ export default function SchedulePage() {
               }
 
               return (
-                <GameScorebug
+                <EnhancedGameScorebug
                   key={game.scheduleId}
                   game={game}
                   homeTeam={homeTeam}
@@ -174,11 +187,12 @@ export default function SchedulePage() {
               )
             })}
           </div>
+          </>
         )}
       </div>
 
       {isGameDetailDialogOpen && selectedGame && (
-        <GameDetailDialog
+        <EnhancedGameDetailDialog
           game={selectedGame}
           teams={teams}
           onClose={handleCloseGameDetailDialog}

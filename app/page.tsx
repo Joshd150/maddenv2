@@ -108,7 +108,7 @@ export default function VflLandingPage() {
 
   return (
     <div className="flex flex-col min-h-[100dvh] text-foreground">
-      <header className="px-4 lg:px-6 h-16 flex items-center sticky top-0 z-50 bg-background/60 backdrop-blur-lg border-b border-primary/20">
+      <header className="px-4 lg:px-6 h-16 flex items-center sticky top-0 z-50 nfl-card/80 backdrop-blur-lg border-b border-primary/20">
         <Link href="#" className="flex items-center justify-center gap-2" prefetch={false}>
           <Image
             src="/vfl-logo.jpeg"
@@ -280,7 +280,7 @@ export default function VflLandingPage() {
         </section>
       </main>
 
-      <footer className="border-t border-primary/20 py-8">
+      <footer className="border-t border-primary/20 py-8 nfl-card">
         <div className="container flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Void Fantasy League. All Rights Reserved.
