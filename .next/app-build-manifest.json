@@ -26,6 +26,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/league-hub/schedule/page.js"
     ],
+    "/league-hub/standings/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/league-hub/standings/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
