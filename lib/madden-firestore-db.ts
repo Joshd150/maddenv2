@@ -1,5 +1,4 @@
-import { Firestore } from "firebase-admin/firestore"
-import { initializeFirebaseAdmin } from "./firebase-admin"
+import { db } from "./firebase-admin"
 import {
   type Player,
   type Team,
@@ -8,17 +7,44 @@ import {
   PlayerStatType,
   type MaddenGame,
   type LeagueSettings,
+  type TeamStats,
 } from "./madden-types"
 
-// Initialize Firebase Admin SDK
-initializeFirebaseAdmin()
-const db = Firestore.getFirestore()
+// Helper function to convert Firestore data to serializable format
+export function convertToSerializable(obj: any): any {
+  if (obj === null || typeof obj !== "object") {
+    return obj
+  }
+
+  if (obj instanceof Date) {
+    return obj.toISOString()
+  }
+
+  // Check for Firestore Timestamp (common in Firebase SDKs)
+  if (obj.toDate && typeof obj.toDate === "function") {
+    return obj.toDate().toISOString()
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => convertToSerializable(item))
+  }
+
+  const newObj: { [key: string]: any } = {}
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      newObj[key] = convertToSerializable(obj[key])
+    }
+  }
+  return newObj
+}
 
 // Helper function to fetch a collection
 async function fetchCollection<T>(collectionPath: string): Promise<T[]> {
   try {
+    console.log(`Fetching collection: ${collectionPath}`)
     const snapshot = await db.collection(collectionPath).get()
-    return snapshot.docs.map((doc) => doc.data() as T)
+    console.log(`Found ${snapshot.docs.length} documents in ${collectionPath}`)
+    return snapshot.docs.map((doc) => convertToSerializable(doc.data()) as T)
   } catch (error) {
     console.error(`Error fetching collection ${collectionPath}:`, error)
     throw new Error(`Failed to fetch ${collectionPath}.`)
@@ -28,30 +54,53 @@ async function fetchCollection<T>(collectionPath: string): Promise<T[]> {
 // Helper function to fetch a document
 async function fetchDocument<T>(docPath: string): Promise<T | undefined> {
   try {
+    console.log(`Fetching document: ${docPath}`)
     const doc = await db.doc(docPath).get()
-    return doc.exists ? (doc.data() as T) : undefined
+    return doc.exists ? (convertToSerializable(doc.data()) as T) : undefined
   } catch (error) {
     console.error(`Error fetching document ${docPath}:`, error)
     throw new Error(`Failed to fetch ${docPath}.`)
   }
 }
 
-// Madden League Data Fetchers
+// Madden League Data Fetchers - following Discord bot structure
 const MaddenDBImpl = {
   async getLatestPlayers(leagueId: string): Promise<Player[]> {
-    return fetchCollection<Player>(`madden_leagues/${leagueId}/players`)
+    return fetchCollection<Player>(`league_data/${leagueId}/MADDEN_PLAYER`)
   },
 
   async getLatestTeams(leagueId: string): Promise<Team[]> {
-    return fetchCollection<Team>(`madden_leagues/${leagueId}/teams`)
+    return fetchCollection<Team>(`league_data/${leagueId}/MADDEN_TEAM`)
   },
 
   async getLatestStandings(leagueId: string): Promise<Standing[]> {
-    return fetchCollection<Standing>(`madden_leagues/${leagueId}/standings`)
+    return fetchCollection<Standing>(`league_data/${leagueId}/MADDEN_STANDING`)
   },
 
   async getPlayerStats(leagueId: string, rosterId: number): Promise<PlayerStatEntry[]> {
-    return fetchCollection<PlayerStatEntry>(`madden_leagues/${leagueId}/player_stats/${rosterId}/stats`)
+    const allStats: PlayerStatEntry[] = []
+    
+    // Fetch all stat types for this player
+    const statTypes = [
+      PlayerStatType.PASSING,
+      PlayerStatType.RUSHING,
+      PlayerStatType.RECEIVING,
+      PlayerStatType.DEFENSE,
+      PlayerStatType.KICKING,
+      PlayerStatType.PUNTING,
+    ]
+
+    for (const statType of statTypes) {
+      try {
+        const stats = await fetchCollection<PlayerStatEntry>(`league_data/${leagueId}/${statType}`)
+        const playerStats = stats.filter(stat => stat.rosterId === rosterId)
+        allStats.push(...playerStats)
+      } catch (error) {
+        console.warn(`No stats found for ${statType} for player ${rosterId}`)
+      }
+    }
+
+    return allStats
   },
 
   async getStatsCollection(
@@ -60,10 +109,17 @@ const MaddenDBImpl = {
     seasonIndex?: number,
     weekIndex?: number,
   ): Promise<PlayerStatEntry[]> {
-    const collectionPath = `madden_leagues/${leagueId}/player_stats_by_type/${statType}/stats`
-    // If you need to filter by season/week, you'd add queries here.
-    // For now, this fetches all stats of a given type.
-    return fetchCollection<PlayerStatEntry>(collectionPath)
+    let stats = await fetchCollection<PlayerStatEntry>(`league_data/${leagueId}/${statType}`)
+    
+    // Filter by season and week if provided
+    if (seasonIndex !== undefined) {
+      stats = stats.filter(stat => stat.seasonIndex === seasonIndex)
+    }
+    if (weekIndex !== undefined) {
+      stats = stats.filter(stat => stat.weekIndex === weekIndex)
+    }
+    
+    return stats
   },
 
   async getPassingStats(leagueId: string, seasonIndex?: number, weekIndex?: number): Promise<PlayerStatEntry[]> {
@@ -91,47 +147,37 @@ const MaddenDBImpl = {
   },
 
   async getWeekScheduleForSeason(leagueId: string, weekIndex: number, seasonIndex?: number): Promise<MaddenGame[]> {
-    const seasonPath = seasonIndex !== undefined ? `seasons/${seasonIndex}` : "latest_season" // Assuming 'latest_season' is a document or collection
-    return fetchCollection<MaddenGame>(`madden_leagues/${leagueId}/schedule/${seasonPath}/weeks/${weekIndex}/games`)
+    const allSchedules = await fetchCollection<MaddenGame>(`league_data/${leagueId}/MADDEN_SCHEDULE`)
+    
+    let filteredSchedules = allSchedules.filter(game => game.weekIndex === weekIndex - 1) // Convert to 0-based
+    
+    if (seasonIndex !== undefined) {
+      filteredSchedules = filteredSchedules.filter(game => game.seasonIndex === seasonIndex)
+    }
+    
+    return filteredSchedules
   },
 
   async getAllSchedules(leagueId: string): Promise<MaddenGame[]> {
-    // This will fetch all games from all weeks in the latest season.
-    // If you have multiple seasons, you might need a more complex query
-    // or a top-level 'all_games' collection. For now, assuming latest season.
-    const latestSeasonDoc = await db.collection(`madden_leagues/${leagueId}/schedule`).doc("latest_season").get()
-    if (!latestSeasonDoc.exists) {
-      console.warn(`No 'latest_season' document found for league ${leagueId} schedule.`)
-      return []
-    }
-    const latestSeasonData = latestSeasonDoc.data()
-    const currentSeasonIndex = latestSeasonData?.seasonIndex // Assuming seasonIndex is stored here
-
-    if (currentSeasonIndex === undefined) {
-      console.warn(`'seasonIndex' not found in 'latest_season' document for league ${leagueId}.`)
-      return []
-    }
-
-    const games: MaddenGame[] = []
-    const weeksCollectionRef = db.collection(`madden_leagues/${leagueId}/schedule/seasons/${currentSeasonIndex}/weeks`)
-    const weeksSnapshot = await weeksCollectionRef.get()
-
-    for (const weekDoc of weeksSnapshot.docs) {
-      const weekGamesSnapshot = await weekDoc.ref.collection("games").get()
-      weekGamesSnapshot.docs.forEach((gameDoc) => {
-        games.push(gameDoc.data() as MaddenGame)
-      })
-    }
-    return games
+    return fetchCollection<MaddenGame>(`league_data/${leagueId}/MADDEN_SCHEDULE`)
   },
 
-  async getTeamStats(leagueId: string): Promise<any[]> {
-    // Assuming team stats are stored in a collection like 'team_stats'
-    return fetchCollection<any>(`madden_leagues/${leagueId}/team_stats`)
+  async getSchedules(leagueId: string): Promise<MaddenGame[]> {
+    return this.getAllSchedules(leagueId)
+  },
+
+  async getTeamStats(leagueId: string): Promise<TeamStats[]> {
+    return fetchCollection<TeamStats>(`league_data/${leagueId}/MADDEN_TEAM_STAT`)
   },
 
   async fetchLeagueSettings(guildId: string): Promise<LeagueSettings | undefined> {
     return fetchDocument<LeagueSettings>(`league_settings/${guildId}`)
+  },
+
+  async getTeamsAssignments(leagueId: string): Promise<any> {
+    // This would need to be implemented based on your Discord bot's structure
+    // For now, return empty object
+    return {}
   },
 }
 
