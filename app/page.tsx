@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { Menu, X, Youtube, Twitter, Instagram, Trophy } from "lucide-react"
+import { Menu, X, Trophy } from "lucide-react"
 // Social icons temporarily commented out due to build issues
 import type { RssItem } from "@/lib/types"
 import { highlightsData } from "@/lib/highlights-data"
 import { HighlightVideoCard } from "@/components/highlight-video-card"
+import { SocialMediaNav } from "@/components/social-media-nav"
 
 const MADDEN_RSS_URL = "https://rss.app/feeds/mvkeMDgV7nuurHWH.xml"
 const NFL_RSS_URL = "https://rss.app/feeds/5xIPyiPZ71AlfDvW.xml"
@@ -142,15 +143,7 @@ export default function VflLandingPage() {
           ))}
         </nav>
         <div className="ml-auto hidden lg:flex items-center gap-2 sm:gap-3">
-          <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
-            <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Link>
-          <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
-            <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Link>
-          <Link href="#" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors">
-            <Youtube className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Link>
+          <SocialMediaNav size="sm" />
           <div className="pl-2 sm:pl-3 ml-1 border-l border-primary/20">
             <Button asChild size="sm">
               <Link href="https://discord.com" prefetch={false} className="vfl-gradient">
@@ -188,27 +181,7 @@ export default function VflLandingPage() {
               </Link>
             ))}
             <div className="flex items-center gap-4 sm:gap-6">
-              <Link
-                href="#"
-                aria-label="Instagram"
-                className="text-muted-foreground hover:text-primary transition-colors touch-target"
-              >
-                <Instagram className="h-6 w-6 sm:h-7 sm:w-7" />
-              </Link>
-              <Link
-                href="#"
-                aria-label="Twitter"
-                className="text-muted-foreground hover:text-primary transition-colors touch-target"
-              >
-                <Twitter className="h-6 w-6 sm:h-7 sm:w-7" />
-              </Link>
-              <Link
-                href="#"
-                aria-label="YouTube"
-                className="text-muted-foreground hover:text-primary transition-colors touch-target"
-              >
-                <Youtube className="h-6 w-6 sm:h-7 sm:w-7" />
-              </Link>
+              <SocialMediaNav size="lg" showLabels={false} />
             </div>
             <Button asChild size="lg" className="touch-target vfl-gradient">
               <Link href="https://discord.com" prefetch={false}>
@@ -222,13 +195,13 @@ export default function VflLandingPage() {
       <main className="flex-1">
         <section className="relative w-full pt-12 sm:pt-16 md:pt-24 lg:pt-32 xl:pt-40 text-center">
           <div className="container px-3 sm:px-4 md:px-6 flex flex-col items-center">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 vfl-gradient rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-fadeIn shadow-lg">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 vfl-gradient rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-fadeIn shadow-2xl ring-4 ring-purple-500/30">
               <Trophy className="w-8 h-8 sm:w-10 sm:h-10 text-primary-foreground" />
             </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-muted-foreground/80 px-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter text-white drop-shadow-2xl px-2 mb-3">
               The Void Opens for Madden 26
             </h1>
-            <p className="mx-auto max-w-[500px] lg:max-w-[600px] text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground mt-3 sm:mt-4 px-4">
+            <p className="mx-auto max-w-[500px] lg:max-w-[600px] text-sm sm:text-base md:text-lg lg:text-xl text-white/90 drop-shadow-lg mt-3 sm:mt-4 px-4 leading-relaxed">
               Entering our 10th franchise season, the VFL is the ultimate franchise experience. Forge your legacy, prove
               your skill, and etch your name in the annals of Madden history.
             </p>
@@ -288,19 +261,7 @@ export default function VflLandingPage() {
             &copy; {new Date().getFullYear()} Void Fantasy League. All Rights Reserved.
           </p>
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors touch-target">
-              <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Link>
-            <Link href="#" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors touch-target">
-              <Youtube className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Link>
-            <Link
-              href="#"
-              aria-label="Instagram"
-              className="text-muted-foreground hover:text-primary transition-colors touch-target"
-            >
-              <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Link>
+            <SocialMediaNav size="sm" />
             <Link
               href="https://discord.com"
               aria-label="Discord"

@@ -1,8 +1,7 @@
 {
-  "/page": "app/page.js",
-  "/league-hub/stats/page": "app/league-hub/stats/page.js",
   "/league-hub/schedule/page": "app/league-hub/schedule/page.js",
   "/league-hub/standings/page": "app/league-hub/standings/page.js",
-  "/league-hub/roster-moves/page": "app/league-hub/roster-moves/page.js",
-  "/league-hub/rating-adjustments/page": "app/league-hub/rating-adjustments/page.js"
+  "/league-hub/rating-adjustments/page": "app/league-hub/rating-adjustments/page.js",
+  "/league-hub/teams/page": "app/league-hub/teams/page.js",
+  "/league-hub/playoffs/page": "app/league-hub/playoffs/page.js"
 }
