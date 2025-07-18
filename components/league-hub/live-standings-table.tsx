@@ -15,10 +15,14 @@ export function LiveStandingsTable({ standings, teams }: LiveStandingsTableProps
   const teamMap = useMemo(() => new Map(teams.map((t) => [t.teamId, t])), [teams])
 
   const formatRecord = (standing: Standing) => {
-    if (standing.totalTies === 0 || standing.totalTies === undefined) {
-      return `${standing.wins}-${standing.losses}`
+    const wins = standing.wins || standing.totalWins || 0
+    const losses = standing.losses || standing.totalLosses || 0
+    const ties = standing.ties || standing.totalTies || 0
+    
+    if (ties === 0) {
+      return `${wins}-${losses}`
     }
-    return `${standing.wins}-${standing.losses}-${standing.ties}`
+    return `${wins}-${losses}-${ties}`
   }
 
   return (
@@ -57,13 +61,16 @@ export function LiveStandingsTable({ standings, teams }: LiveStandingsTableProps
                 console.warn(`Missing team data for standing: ${standing.teamId}`)
                 return null
               }
+              const wins = standing.wins || standing.totalWins || 0
+              const losses = standing.losses || standing.totalLosses || 0
+              const ties = standing.ties || standing.totalTies || 0
               return (
                 <TableRow key={standing.teamId}>
                   <TableCell className="font-medium">{standing.rank}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Image
-                        src={getTeamLogo(team.abbrName) || "/placeholder.svg"}
+                        src={getTeamLogo(team.abbrName || team.teamAbbr) || "/placeholder.svg"}
                         alt={`${team.displayName} logo`}
                         width={24}
                         height={24}
@@ -72,9 +79,9 @@ export function LiveStandingsTable({ standings, teams }: LiveStandingsTableProps
                       {team.displayName}
                     </div>
                   </TableCell>
-                  <TableCell>{standing.wins}</TableCell>
-                  <TableCell>{standing.losses}</TableCell>
-                  <TableCell>{standing.ties}</TableCell>
+                  <TableCell>{wins}</TableCell>
+                  <TableCell>{losses}</TableCell>
+                  <TableCell>{ties}</TableCell>
                   <TableCell>{standing.winPct?.toFixed(3) || "N/A"}</TableCell>
                   <TableCell>{standing.divisionRank}</TableCell>
                   <TableCell>{standing.conferenceRank}</TableCell>
