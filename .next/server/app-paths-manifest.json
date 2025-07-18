@@ -1,7 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/api/rss/route": "app/api/rss/route.js",
   "/league-hub/standings/page": "app/league-hub/standings/page.js",
-  "/league-hub/schedule/page": "app/league-hub/schedule/page.js"
+  "/league-hub/schedule/page": "app/league-hub/schedule/page.js",
+  "/league-hub/stats/page": "app/league-hub/stats/page.js"
 }
