@@ -444,362 +444,357 @@ export function EnhancedPlayerDetailDialog({
 
         <div className="flex-1 overflow-hidden flex flex-col">
           <div className="p-3 sm:p-4 lg:p-6 flex-shrink-0">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-4 sm:mb-6 nfl-card">
-              <TabsTrigger value="overview" className="flex items-center gap-2">
-                <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Overview</span>
-                <span className="sm:hidden">Info</span>
-              </TabsTrigger>
-              <TabsTrigger value="ratings" className="flex items-center gap-2">
-                <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Ratings</span>
-                <span className="sm:hidden">Rate</span>
-              </TabsTrigger>
-              <TabsTrigger value="stats" className="flex items-center gap-2">
-                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Statistics</span>
-                <span className="sm:hidden">Stats</span>
-              </TabsTrigger>
-              <TabsTrigger value="traits" className="flex items-center gap-2">
-                <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden lg:inline">Traits</span>
-                <span className="lg:hidden">Trait</span>
-              </TabsTrigger>
-              <TabsTrigger value="contract" className="flex items-center gap-2">
-                <Award className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden lg:inline">Contract</span>
-                <span className="lg:hidden">$</span>
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                {/* Key Ratings */}
-                <Card className="nfl-card lg:col-span-2">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-                      <Target className="w-4 h-4 sm:w-5 sm:h-5" />
-                      Key Ratings
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 sm:space-y-4">
-                    {baseRatings.slice(0, 6).map((rating) => (
-                      <RatingBar
-                        key={rating.label}
-                        label={rating.label}
-                        value={rating.value}
-                      />
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Quick Stats */}
-                <Card className="nfl-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-                      <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
-                      Quick Stats
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 sm:space-y-3">
-                    <div className="flex justify-between text-sm sm:text-base">
-                      <span>Overall Rating</span>
-                      <span className="font-bold text-base sm:text-lg">{player.overall}</span>
-                    </div>
-                    <div className="flex justify-between text-sm sm:text-base">
-                      <span>Best Overall</span>
-                      <span className="font-bold text-base sm:text-lg">{player.playerBestOvr}</span>
-                    </div>
-                    <div className="flex justify-between text-sm sm:text-base">
-                      <span>Development</span>
-                      <span className="font-bold">{formatDevTrait(player.devTrait)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm sm:text-base">
-                      <span>Experience</span>
-                      <span className="font-bold">{getSeasonFormatting(player.yearsPro)}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Abilities */}
-              {player.signatureSlotList && player.signatureSlotList.some(ability => !ability.isEmpty) && (
-                <Card className="nfl-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Crown className="w-5 h-5" />
-                      Signature Abilities
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {player.signatureSlotList
-                        .filter(ability => !ability.isEmpty && ability.signatureAbility)
-                        .map((ability, index) => (
-                          <div key={index} className="p-4 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30">
-                            <div className="font-bold text-lg mb-2">{ability.signatureAbility?.signatureTitle}</div>
-                            <div className="text-sm text-muted-foreground">{ability.signatureAbility?.signatureDescription}</div>
-                          </div>
-                        ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="ratings" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Base Physical Ratings */}
-                <Card className="nfl-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Activity className="w-5 h-5" />
-                      Physical Attributes
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {baseRatings.map((rating) => (
-                      <RatingBar
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-4 sm:mb-6 bg-muted">
-                        label={rating.label}
-                        value={rating.value}
-                      />
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Position-Specific Ratings */}
-                <Card className="nfl-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="w-5 h-5" />
-                      {player.position} Skills
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {specificRatings.slice(0, 8).map((rating) => (
-                      <RatingBar
-                        key={rating.label}
-                        label={rating.label}
-                        value={rating.value}
-                      />
-                    ))}
-                  </CardContent>
-                </Card>
-              </div>
-            </Tabs>
-          </div>
-
-          <ScrollArea className="flex-1 px-3 sm:px-4 lg:px-6 pb-6">
             <Tabs defaultValue="overview" className="w-full">
-              {/* Additional Ratings if available */}
-              {specificRatings.length > 8 && (
-                  <Card className="border">
-                  <Card className="border lg:col-span-2">
-                    <CardTitle className="flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5" />
-                      Additional Skills
-                    </CardTitle>
-                  </CardHeader>
-                  <Card className="border">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {specificRatings.slice(8).map((rating) => (
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 mb-4 sm:mb-6 nfl-card">
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Overview</span>
+                  <span className="sm:hidden">Info</span>
+                </TabsTrigger>
+                <TabsTrigger value="ratings" className="flex items-center gap-2">
+                  <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Ratings</span>
+                  <span className="sm:hidden">Rate</span>
+                </TabsTrigger>
+                <TabsTrigger value="stats" className="flex items-center gap-2">
+                  <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Statistics</span>
+                  <span className="sm:hidden">Stats</span>
+                </TabsTrigger>
+                <TabsTrigger value="traits" className="flex items-center gap-2">
+                  <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden lg:inline">Traits</span>
+                  <span className="lg:hidden">Trait</span>
+                </TabsTrigger>
+                <TabsTrigger value="contract" className="flex items-center gap-2">
+                  <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden lg:inline">Contract</span>
+                  <span className="lg:hidden">$</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                  {/* Key Ratings */}
+                  <Card className="nfl-card lg:col-span-2">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                        <Target className="w-4 h-4 sm:w-5 sm:h-5" />
+                        Key Ratings
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 sm:space-y-4">
+                      {baseRatings.slice(0, 6).map((rating) => (
                         <RatingBar
                           key={rating.label}
                           label={rating.label}
                           value={rating.value}
                         />
                       ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-                  <Card className="border">
+                    </CardContent>
+                  </Card>
 
-            <TabsContent value="stats" className="space-y-6">
-              {loadingStats ? (
-                <div className="text-center text-muted-foreground py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                  Loading career statistics...
+                  {/* Quick Stats */}
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                        <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
+                        Quick Stats
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2 sm:space-y-3">
+                      <div className="flex justify-between text-sm sm:text-base">
+                        <span>Overall Rating</span>
+                        <span className="font-bold text-base sm:text-lg">{player.overall}</span>
+                      </div>
+                      <div className="flex justify-between text-sm sm:text-base">
+                        <span>Best Overall</span>
+                        <span className="font-bold text-base sm:text-lg">{player.playerBestOvr}</span>
+                      </div>
+                      <div className="flex justify-between text-sm sm:text-base">
+                        <span>Development</span>
+                        <span className="font-bold">{formatDevTrait(player.devTrait)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm sm:text-base">
+                        <span>Experience</span>
+                        <span className="font-bold">{getSeasonFormatting(player.yearsPro)}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              ) : errorStats ? (
-                <div className="text-red-400 text-center py-12">{errorStats}</div>
-              ) : (
+
+                {/* Abilities */}
+                {player.signatureSlotList && player.signatureSlotList.some(ability => !ability.isEmpty) && (
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Crown className="w-5 h-5" />
+                        Signature Abilities
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {player.signatureSlotList
+                          .filter(ability => !ability.isEmpty && ability.signatureAbility)
+                          .map((ability, index) => (
+                            <div key={index} className="p-4 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30">
+                              <div className="font-bold text-lg mb-2">{ability.signatureAbility?.signatureTitle}</div>
+                              <div className="text-sm text-muted-foreground">{ability.signatureAbility?.signatureDescription}</div>
+                            </div>
+                          ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="ratings" className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {renderStatSection("Passing Stats", aggregatedPlayerStats, [
-                    "passComp", "passAtt", "passYds", "passTDs", "passInts", "passerRating", "passSacks"
-                  ], <TrendingUp className="w-5 h-5" />)}
-                  
-                  {renderStatSection("Rushing Stats", aggregatedPlayerStats, [
-                    "rushAtt", "rushYds", "rushTDs", "rushFum", "rushYdsPerAtt"
-                  ], <Activity className="w-5 h-5" />)}
-                  
-                  {renderStatSection("Receiving Stats", aggregatedPlayerStats, [
-                    "recCatches", "recYds", "recTDs", "recDrops"
-                  ], <Target className="w-5 h-5" />)}
-                  
-                  {renderStatSection("Defensive Stats", aggregatedPlayerStats, [
-                    "defTotalTackles", "defSacks", "defInts", "defFumRec", "defForcedFum", "defTDs", "defDeflections"
-                  ], <Shield className="w-5 h-5" />)}
-                  
-                  {renderStatSection("Kicking Stats", aggregatedPlayerStats, [
-                    "fGMade", "fGAtt", "xPMade", "xPAtt", "kickPts", "fGLongest"
-                  ], <Award className="w-5 h-5" />)}
-                  
-                  {renderStatSection("Punting Stats", aggregatedPlayerStats, [
-                    "puntAtt", "puntYds", "puntYdsPerAtt", "puntNetYdsPerAtt", "puntsIn20", "puntTBs", "puntsBlocked"
-                  ], <Clock className="w-5 h-5" />)}
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="traits" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Playing Style Traits */}
-                  <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Zap className="w-5 h-5" />
-                      Playing Style
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {player.qBStyleTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>QB Style:</span>
-                        <Badge variant="outline">{formatQBStyleTrait(player.qBStyleTrait)}</Badge>
-                      </div>
-                    )}
-                    {player.sensePressureTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>Sense Pressure:</span>
-                        <Badge variant="outline">{formatSensePressureTrait(player.sensePressureTrait)}</Badge>
-                      </div>
-                    )}
-                    {player.lBStyleTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>LB Style:</span>
-                        <Badge variant="outline">{formatLBStyleTrait(player.lBStyleTrait)}</Badge>
-                      </div>
-                    )}
-                    {player.playBallTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>Play Ball:</span>
-                        <Badge variant="outline">{formatPlayBallTrait(player.playBallTrait)}</Badge>
-                      </div>
-                    )}
-                    {player.coverBallTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>Cover Ball:</span>
-                        <Badge variant="outline">{formatCoverBallTrait(player.coverBallTrait)}</Badge>
-                      </div>
-                    )}
-                    {player.penaltyTrait !== undefined && (
-                      <div className="flex justify-between items-center p-3 rounded bg-muted/30">
-                        <span>Penalty:</span>
-                        <Badge variant="outline">{formatPenaltyTrait(player.penaltyTrait)}</Badge>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Special Abilities */}
-                  <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Star className="w-5 h-5" />
-                      Special Abilities
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {[
-                      { label: "Throw Away", value: player.throwAwayTrait },
-                      { label: "Tight Spiral", value: player.tightSpiralTrait },
-                      { label: "YAC Catch", value: player.yACCatchTrait },
-                      { label: "Possession Catch", value: player.posCatchTrait },
-                      { label: "Aggressive Catch", value: player.hPCatchTrait },
-                      { label: "Fight for Yards", value: player.fightForYardsTrait },
-                      { label: "Feet in Bounds", value: player.feetInBoundsTrait },
-                      { label: "Drop Open Pass", value: player.dropOpenPassTrait },
-                      { label: "DL Swim", value: player.dLSwimTrait },
-                      { label: "DL Spin", value: player.dLSpinTrait },
-                      { label: "DL Bull Rush", value: player.dLBullRushTrait },
-                      { label: "Strip Ball", value: player.stripBallTrait },
-                      { label: "High Motor", value: player.highMotorTrait },
-                      { label: "Big Hitter", value: player.bigHitTrait },
-                  <Card className="border">
-                      { label: "Clutch", value: player.clutchTrait },
-                    ]
-                      .filter(trait => trait.value !== undefined)
-                      .map((trait) => (
-                        <div key={trait.label} className="flex justify-between items-center p-2 rounded bg-muted/30">
-                          <span className="text-sm">{trait.label}:</span>
-                          <Badge 
-                            variant={trait.value === YesNoTrait.YES ? "default" : "secondary"}
-                            className={trait.value === YesNoTrait.YES ? "bg-green-500" : ""}
-                          >
-                            {formatYesNoTrait(trait.value!)}
-                          </Badge>
-                        </div>
+                  {/* Base Physical Ratings */}
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Activity className="w-5 h-5" />
+                        Physical Attributes
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {baseRatings.map((rating) => (
+                        <RatingBar
+                          key={rating.label}
+                          label={rating.label}
+                          value={rating.value}
+                        />
                       ))}
+                    </CardContent>
+                  </Card>
+
+                  {/* Position-Specific Ratings */}
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Target className="w-5 h-5" />
+                        {player.position} Skills
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {specificRatings.slice(0, 8).map((rating) => (
+                        <RatingBar
+                          key={rating.label}
+                          label={rating.label}
+                          value={rating.value}
+                        />
+                      ))}
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Additional Ratings if available */}
+                {specificRatings.length > 8 && (
+                  <Card className="nfl-card lg:col-span-2">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5" />
+                        Additional Skills
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {specificRatings.slice(8).map((rating) => (
+                          <RatingBar
+                            key={rating.label}
+                            label={rating.label}
+                            value={rating.value}
+                          />
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="stats" className="space-y-6">
+                {loadingStats ? (
+                  <div className="text-center text-muted-foreground py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    Loading career statistics...
+                  </div>
+                ) : errorStats ? (
+                  <div className="text-red-400 text-center py-12">{errorStats}</div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {renderStatSection("Passing Stats", aggregatedPlayerStats, [
+                      "passComp", "passAtt", "passYds", "passTDs", "passInts", "passerRating", "passSacks"
+                    ], <TrendingUp className="w-5 h-5" />)}
+                    
+                    {renderStatSection("Rushing Stats", aggregatedPlayerStats, [
+                      "rushAtt", "rushYds", "rushTDs", "rushFum", "rushYdsPerAtt"
+                    ], <Activity className="w-5 h-5" />)}
+                    
+                    {renderStatSection("Receiving Stats", aggregatedPlayerStats, [
+                      "recCatches", "recYds", "recTDs", "recDrops"
+                    ], <Target className="w-5 h-5" />)}
+                    
+                    {renderStatSection("Defensive Stats", aggregatedPlayerStats, [
+                      "defTotalTackles", "defSacks", "defInts", "defFumRec", "defForcedFum", "defTDs", "defDeflections"
+                    ], <Shield className="w-5 h-5" />)}
+                    
+                    {renderStatSection("Kicking Stats", aggregatedPlayerStats, [
+                      "fGMade", "fGAtt", "xPMade", "xPAtt", "kickPts", "fGLongest"
+                    ], <Award className="w-5 h-5" />)}
+                    
+                    {renderStatSection("Punting Stats", aggregatedPlayerStats, [
+                      "puntAtt", "puntYds", "puntYdsPerAtt", "puntNetYdsPerAtt", "puntsIn20", "puntTBs", "puntsBlocked"
+                    ], <Clock className="w-5 h-5" />)}
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="traits" className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Playing Style Traits */}
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Zap className="w-5 h-5" />
+                        Playing Style
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {player.qBStyleTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>QB Style:</span>
+                          <Badge variant="outline">{formatQBStyleTrait(player.qBStyleTrait)}</Badge>
+                        </div>
+                      )}
+                      {player.sensePressureTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>Sense Pressure:</span>
+                          <Badge variant="outline">{formatSensePressureTrait(player.sensePressureTrait)}</Badge>
+                        </div>
+                      )}
+                      {player.lBStyleTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>LB Style:</span>
+                          <Badge variant="outline">{formatLBStyleTrait(player.lBStyleTrait)}</Badge>
+                        </div>
+                      )}
+                      {player.playBallTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>Play Ball:</span>
+                          <Badge variant="outline">{formatPlayBallTrait(player.playBallTrait)}</Badge>
+                        </div>
+                      )}
+                      {player.coverBallTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>Cover Ball:</span>
+                          <Badge variant="outline">{formatCoverBallTrait(player.coverBallTrait)}</Badge>
+                        </div>
+                      )}
+                      {player.penaltyTrait !== undefined && (
+                        <div className="flex justify-between items-center p-3 rounded bg-muted/30">
+                          <span>Penalty:</span>
+                          <Badge variant="outline">{formatPenaltyTrait(player.penaltyTrait)}</Badge>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Special Abilities */}
+                  <Card className="nfl-card">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Star className="w-5 h-5" />
+                        Special Abilities
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {[
+                        { label: "Throw Away", value: player.throwAwayTrait },
+                        { label: "Tight Spiral", value: player.tightSpiralTrait },
+                        { label: "YAC Catch", value: player.yACCatchTrait },
+                        { label: "Possession Catch", value: player.posCatchTrait },
+                        { label: "Aggressive Catch", value: player.hPCatchTrait },
+                        { label: "Fight for Yards", value: player.fightForYardsTrait },
+                        { label: "Feet in Bounds", value: player.feetInBoundsTrait },
+                        { label: "Drop Open Pass", value: player.dropOpenPassTrait },
+                        { label: "DL Swim", value: player.dLSwimTrait },
+                        { label: "DL Spin", value: player.dLSpinTrait },
+                        { label: "DL Bull Rush", value: player.dLBullRushTrait },
+                        { label: "Strip Ball", value: player.stripBallTrait },
+                        { label: "High Motor", value: player.highMotorTrait },
+                        { label: "Big Hitter", value: player.bigHitTrait },
+                        { label: "Clutch", value: player.clutchTrait },
+                      ]
+                        .filter(trait => trait.value !== undefined)
+                        .map((trait) => (
+                          <div key={trait.label} className="flex justify-between items-center p-2 rounded bg-muted/30">
+                            <span className="text-sm">{trait.label}:</span>
+                            <Badge 
+                              variant={trait.value === YesNoTrait.YES ? "default" : "secondary"}
+                              className={trait.value === YesNoTrait.YES ? "bg-green-500" : ""}
+                            >
+                              {formatYesNoTrait(trait.value!)}
+                            </Badge>
+                          </div>
+                        ))}
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="contract" className="space-y-6">
+                <Card className="nfl-card">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Award className="w-5 h-5" />
+                      Contract Details
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {player.isFreeAgent ? (
+                      <div className="text-center py-12">
+                        <User className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                        <h3 className="text-2xl font-bold mb-2">Free Agent</h3>
+                        <p className="text-muted-foreground">This player is currently a free agent</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Contract Length:</span>
+                            <span className="font-bold text-lg">{player.contractYearsLeft}/{player.contractLength} years</span>
+                          </div>
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Annual Salary:</span>
+                            <span className="font-bold text-lg text-green-400">{formatMoney(player.contractSalary)}</span>
+                          </div>
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Cap Hit:</span>
+                            <span className="font-bold text-lg">{formatMoney(player.capHit)}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Signing Bonus:</span>
+                            <span className="font-bold text-lg">{formatMoney(player.contractBonus)}</span>
+                          </div>
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Release Savings:</span>
+                            <span className="font-bold text-lg text-green-400">{formatMoney(player.capReleaseNetSavings)}</span>
+                          </div>
+                          <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                            <span className="font-medium">Release Penalty:</span>
+                            <span className="font-bold text-lg text-red-400">{formatMoney(player.capReleasePenalty)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="contract" className="space-y-6">
-                <Card className="border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Contract Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {player.isFreeAgent ? (
-                    <div className="text-center py-12">
-                      <User className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                      <h3 className="text-2xl font-bold mb-2">Free Agent</h3>
-                      <p className="text-muted-foreground">This player is currently a free agent</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Contract Length:</span>
-                          <span className="font-bold text-lg">{player.contractYearsLeft}/{player.contractLength} years</span>
-                        </div>
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Annual Salary:</span>
-                          <span className="font-bold text-lg text-green-400">{formatMoney(player.contractSalary)}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Cap Hit:</span>
-                          <span className="font-bold text-lg">{formatMoney(player.capHit)}</span>
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Signing Bonus:</span>
-                          <span className="font-bold text-lg">{formatMoney(player.contractBonus)}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Release Savings:</span>
-                          <span className="font-bold text-lg text-green-400">{formatMoney(player.capReleaseNetSavings)}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
-                          <span className="font-medium">Release Penalty:</span>
-                          <span className="font-bold text-lg text-red-400">{formatMoney(player.capReleasePenalty)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-          </ScrollArea>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
 
         {isPlayerSelectionDialogOpen && (
